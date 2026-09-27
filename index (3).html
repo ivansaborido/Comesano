@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#EAF7CE" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icon-32.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="icon-180.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Come sano" />
+<title>Come sano, pisha</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+:root{
+  --ink:#16261F; --paper:#FBF9F3; --card:#FFFFFF; --line:#E8E5DB;
+  --muted:#6E7B72; --green:#2E9E5B; --green-deep:#1E7A44;
+  --lime:#A6E22E; --lime-soft:#EAF7CE; --coral:#F0633C; --coral-soft:#FCE7DF;
+  --amber:#E8A72E; --amber-soft:#FBEDCF; --blue:#3B9BC4; --blue-soft:#E1F0F6;
+  --orange:#F5883E; --mint:#DDF3E4;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0; background:var(--paper);}
+body{font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:linear-gradient(180deg,#EAF7CE 0%, #F4FBEC 180px, #FBF9F3 460px);}
+#root{min-height:100vh;}
+.nf{max-width:520px; margin:0 auto; position:relative; padding-bottom:92px; min-height:100vh; background:transparent;}
+.nf h1,.nf h2,.disp{font-family:'Fraunces',Georgia,serif;}
+.hdr{position:sticky; top:0; z-index:20; background:linear-gradient(180deg,#EAF7CE,rgba(244,251,236,.92)); backdrop-filter:blur(8px); padding:16px 20px 12px; border-bottom:1px solid rgba(200,215,180,.6);}
+.hdr-top{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.brand{font-family:'Fraunces',serif; font-weight:600; font-size:22px; letter-spacing:-.5px;}
+.brand span{color:var(--green);}
+.hdr-actions{display:flex; align-items:center; gap:8px;}
+.icon-btn{background:var(--card); border:1px solid var(--line); border-radius:999px; width:38px; height:38px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink); font-size:16px;}
+.chip-btn{display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px 12px 5px 5px; cursor:pointer; font-size:13px; font-weight:600;}
+.avatar{width:28px; height:28px; border-radius:999px; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;}
+.wrap{padding:20px;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:20px; padding:20px;}
+.eyebrow{font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted);}
+.muted{color:var(--muted);}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:14px; padding:14px 18px; font-family:'Inter'; font-weight:600; font-size:15px; cursor:pointer; width:100%;}
+.btn-primary{background:var(--green); color:#fff;} .btn-primary:active{background:var(--green-deep);}
+.btn-ghost{background:var(--card); color:var(--ink); border:1px solid var(--line);}
+.btn-lime{background:var(--lime); color:var(--ink);}
+.btn-sm{padding:9px 14px; font-size:13px; border-radius:11px; width:auto;}
+.btn:disabled{opacity:.55;}
+.field{margin-bottom:14px;} .field label{display:block; font-size:13px; font-weight:600; margin-bottom:6px;}
+.input,.select{width:100%; border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-family:'Inter'; font-size:15px; background:var(--card); color:var(--ink);}
+.input:focus,.select:focus{outline:2px solid var(--lime); border-color:transparent;}
+.row{display:flex; gap:12px;} .row>*{flex:1;}
+.pill{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:var(--card); border-radius:999px; padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer;}
+.pill.on{background:var(--green); color:#fff; border-color:var(--green);}
+.nav{position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:520px; background:rgba(251,249,243,.94); backdrop-filter:blur(10px); border-top:1px solid var(--line); display:flex; padding:8px 4px calc(8px + env(safe-area-inset-bottom)); z-index:30;}
+.nav button{flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0; color:var(--muted); font-size:10px; font-weight:600; cursor:pointer;}
+.nav button.on{color:var(--green);}
+.nav .ni{font-size:20px; line-height:1;}
+.spinner{width:18px; height:18px; border:3px solid rgba(46,125,79,.25); border-top-color:var(--green); border-radius:50%; animation:spin 1s linear infinite; display:inline-block; vertical-align:middle;}
+.spinner.big{width:26px; height:26px; border-width:4px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.fade{animation:fade .35s ease;} @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+.badge{display:inline-flex; align-items:center; gap:5px; border-radius:999px; padding:5px 11px; font-size:12px; font-weight:700;}
+.b-sano{background:var(--lime-soft); color:var(--green-deep);} .b-mod{background:var(--amber-soft); color:#96690f;} .b-no{background:var(--coral-soft); color:#a1381f;}
+.macro{flex:1; text-align:center; background:var(--paper); border-radius:12px; padding:10px 4px;}
+.macro b{font-family:'Fraunces'; font-size:18px; display:block;} .macro span{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;}
+.food-item{display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line);} .food-item:last-child{border-bottom:none;}
+.dot{width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:16px;}
+.empty{text-align:center; padding:30px 16px; color:var(--muted);}
+.ex-card{border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:12px;}
+.yt{display:inline-flex; align-items:center; gap:7px; color:#c4302b; font-weight:600; font-size:13px; text-decoration:none; margin-top:10px;}
+.link{color:var(--green); font-weight:600; cursor:pointer; background:none; border:none; font-family:'Inter'; font-size:14px;}
+.note{font-size:12px; color:var(--muted); line-height:1.5;}
+.overlay{position:fixed; inset:0; background:rgba(20,30,25,.4); display:flex; align-items:flex-end; justify-content:center; z-index:50;}
+.sheet{background:var(--card); width:100%; max-width:520px; border-radius:24px 24px 0 0; padding:22px 20px calc(22px + env(safe-area-inset-bottom)); animation:up .3s ease; max-height:88vh; overflow-y:auto;}
+@keyframes up{from{transform:translateY(100%);} to{transform:none;}}
+.preview-img{width:100%; border-radius:16px; max-height:280px; object-fit:cover;}
+.bar-track{height:8px; background:var(--paper); border-radius:999px; overflow:hidden; margin-top:6px;}
+.bar-fill{height:100%; border-radius:999px; transition:width .5s ease;}
+.stat{flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px;}
+.stat b{font-family:'Fraunces'; font-size:22px; display:block; line-height:1.1;} .stat span{font-size:11px; color:var(--muted);}
+.seg{display:flex; background:var(--paper); border-radius:12px; padding:4px; gap:4px;}
+.seg button{flex:1; border:none; background:none; padding:9px; border-radius:9px; font-family:'Inter'; font-weight:600; font-size:13px; color:var(--muted); cursor:pointer;}
+.seg button.on{background:var(--card); color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.toast{position:fixed; bottom:104px; left:50%; transform:translateX(-50%); background:var(--green); color:#fff; padding:13px 22px; border-radius:999px; font-weight:600; font-size:14px; z-index:60; box-shadow:0 8px 24px rgba(20,40,25,.22); max-width:92%; text-align:center; cursor:pointer;}
+.regano-box{background:var(--coral-soft); border-radius:16px; padding:16px; font-size:15px; line-height:1.55; color:#8a2f18; font-weight:500;}
+.burn-item{display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line);} .burn-item:last-child{border-bottom:none;}
+.goal-card{background:linear-gradient(135deg,#1E5A38,#2E7D4F); color:#fff; border:none; border-radius:20px; padding:18px 20px;}
+.goal-card .big{font-family:'Fraunces'; font-size:30px; font-weight:600; line-height:1;}
+.warn{background:var(--coral-soft); color:#8a2f18; border-radius:14px; padding:12px 14px; font-size:13px; line-height:1.5;}
+.day-row{display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--line);} .day-row:last-child{border-bottom:none;}
+.day-tag{width:64px; flex-shrink:0; font-weight:700; font-size:13px; color:var(--green-deep);}
+.tagline{font-size:11px; color:var(--green-deep); font-weight:600; margin-top:2px; letter-spacing:.2px;}
+.mic{width:66px; height:66px; border-radius:999px; border:none; background:var(--green); color:#fff; font-size:26px; cursor:pointer; display:flex; align-items:center; justify-content:center; margin:0 auto; box-shadow:0 8px 22px rgba(46,158,91,.4);}
+.mic.rec{background:var(--coral); animation:pulse 1.2s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(240,99,60,.55);}70%{box-shadow:0 0 0 18px rgba(240,99,60,0);}100%{box-shadow:0 0 0 0 rgba(240,99,60,0);}}
+.voz-card{background:linear-gradient(135deg,#F4FBEC,#EAF7CE); border:1px solid var(--line); border-radius:20px; padding:20px; text-align:center; margin-bottom:22px;}
+.metric-chip{border:1px solid var(--line); background:var(--card); border-radius:999px; padding:8px 14px; font-size:13px; font-weight:600; cursor:pointer; display:inline-flex; gap:6px; align-items:center;}
+.metric-chip.on{background:var(--green); color:#fff; border-color:var(--green);}
+.diario-item{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:10px;}
+.diario-fecha{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--green); margin-bottom:6px;}
+.rem-row{display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--line);}
+.rem-row:last-child{border-bottom:none;}
+.switch{width:46px; height:28px; border-radius:999px; background:var(--line); position:relative; cursor:pointer; transition:background .2s; flex-shrink:0;}
+.switch.on{background:var(--green);}
+.switch b{position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:999px; background:#fff; transition:left .2s;}
+.switch.on b{left:21px;}
+.wa-btn{background:#25D366; color:#fff;}
+.hero-strip{font-size:16px; letter-spacing:3px; text-align:center; margin:2px 0 0; opacity:.9;}
+</style>
+</head>
+<body>
+<div id="root">
+  <div style="font-family:system-ui,sans-serif;padding:60px 24px;text-align:center;color:#2E7D3F">
+    <div style="font-size:44px">🥑</div>
+    <div style="font-weight:700;margin-top:10px;font-size:18px">Come sano, pisha</div>
+    <div style="margin-top:8px;color:#8a9">Cargando… un segundito.</div>
+  </div>
+</div>
+<script>
+window.addEventListener("error", function (e) {
+  var r = document.getElementById("root");
+  if (!r || r.textContent.indexOf("Cargando") === -1) return;
+  r.innerHTML = '<div style="font-family:system-ui,sans-serif;padding:34px 24px;color:#a1381f;line-height:1.55">'
+    + '<div style="font-size:34px">😵‍💫</div><b>Uy, no cargó bien.</b><br>'
+    + '<span style="color:#a1381f">' + (e.message || "") + '</span><br><br>'
+    + '<span style="color:#555">Ábrela con conexión en Chrome o Safari. Lo ideal: súbela a un hosting (ver instrucciones) y ábrela desde ahí — como archivo suelto, muchos móviles no la ejecutan.</span></div>';
+});
+</script>
+<script type="text/plain" id="app-src">
+const { useState, useEffect, useRef } = React;
+
+/* ================= CONFIG ================= */
+const GEMINI_MODEL = "gemini-flash-latest";
+const CLAUDE_MODEL = "claude-sonnet-5";
+const ZONES = ["Barriga", "Piernas", "Brazos", "Glúteos", "Espalda", "Tonificar"];
+const ACTIVIDAD = { "Sedentario": 1.2, "Ligero": 1.375, "Moderado": 1.55, "Activo": 1.725 };
+const OLES = [
+  "¡Ole tú, pisha! Comida sana y sin pasarte.",
+  "¡Así se hace, quillo! Sigue por ahí.",
+  "¡Ea, qué crack estás hecho! Eso es comer bien.",
+  "¡Bien jugao, pisha! Tu cuerpo te lo agradece.",
+  "¡Chócala! Eso sí que es un fichaje sano.",
+  "¡Ozú qué arte, mi arma! Comiendo como los ángeles.",
+  "¡Toma ya, illo! Eso es un platazo de campeón.",
+  "¡Qué grande eres, compae! Sano y rico, ¿qué más se pide?",
+  "¡Anda que no está bueno eso ni ná! Y encima sano, pisha.",
+  "¡Miarma, te has coronao! Sigue así de fino.",
+  "¡Olé por ti, quilla! Tu báscula va a estar contentísima.",
+  "¡Eso es comer con cabeza, chiquillo! Me tienes orgulloso.",
+  "¡Qué salero pa' comer, pisha! No cambies ni un pelo.",
+  "¡Vas fino filipino, quillo! A este ritmo, bomboncito.",
+  "¡Bien ahí, mi arma! Comida de las que suman.",
+  "¡Ea ea, qué disciplina! Te mereces un aplauso, pisha.",
+  "¡Como pa' ponerte un diez, quilla! Sigue en esa línea.",
+  "¡Menú de lujo, compae! Así da gusto verte.",
+  "¡Qué máquina, illo! Comiendo así llegas donde quieras.",
+  "¡Olé tus michelines despidiéndose, pisha! Vas de cine.",
+];
+const EXPRE = ["pisha","quillo","quilla","mi arma","miarma","ea","no veas","chiquillo","illo","compae","ozú","qué arte","chalao","canasta","al liquindoi","leñe","picha","chochón","que te crece el pelo"];
+const VIBES = ["exagerado y teatrero","socarrón y con retranca","cariñoso y padrazo","de monologuista gracioso","pícaro y con guasa fina","de abuela regañona con cariño","de comentarista de fútbol emocionado"];
+const REGANO_FALLBACK = [
+  {regano:"¡Ay pisha, que se te ha ido la mano con eso! Pero tranqui, quillo, que con un poquito de movimiento y como si no hubiera pasao.",ejercicios:[{nombre:"Caminar a paso ligero",minutos:30,busqueda_youtube:"caminar rápido para quemar calorías"},{nombre:"Saltar a la comba",minutos:15,busqueda_youtube:"saltar a la comba principiantes"},{nombre:"Sentadillas en casa",minutos:10,busqueda_youtube:"sentadillas en casa principiantes"}]},
+  {regano:"¡Miarma, pero qué has hecho! Eso lleva más calorías que la feria entera. Ea, a moverse un poquito, que no pasa ná.",ejercicios:[{nombre:"Bici o spinning suave",minutos:25,busqueda_youtube:"bici estatica quemar grasa casa"},{nombre:"Zumba en casa",minutos:20,busqueda_youtube:"zumba principiantes casa"},{nombre:"Plancha abdominal",minutos:8,busqueda_youtube:"plancha abdominal principiantes"}]},
+  {regano:"¡Ozú, chiquillo, menudo festín! Que yo no te riño, ¿eh?, que solo digo... venga, un ratito de ejercicio y en paz.",ejercicios:[{nombre:"Trote suave",minutos:25,busqueda_youtube:"trotar principiantes quemar grasa"},{nombre:"Burpees a ritmo suave",minutos:10,busqueda_youtube:"burpees principiantes"},{nombre:"Subir y bajar escaleras",minutos:15,busqueda_youtube:"ejercicio escaleras en casa"}]},
+];
+/* ===== Humor por región ===== */
+const REGIONS = {
+  andalucia:{label:"Andalucía",coach:"andaluz de Cádiz, con muchísimo salero y guasa cariñosa",trato:"pisha",expres:["pisha","quillo","mi arma","miarma","ozú","illo","compae","no veas","qué arte","ea"]},
+  pais_vasco:{label:"País Vasco",coach:"vasco de Bilbao, socarrón, directo y de humor seco",trato:"txo",expres:["aupa","txo","majo","poto","jo","ostras","de cine","no te digo","venga ya"]},
+  galicia:{label:"Galicia",coach:"gallego, con retranca y guasa suave",trato:"meu",expres:["rapaz","meu","ho","boh","ai que ver","que si ho","dá igual","vaites"]},
+  madrid:{label:"Madrid",coach:"madrileño castizo, chulapo y directo",trato:"tío",expres:["tío","majo","mazo","en plan","chaval","hala","qué arte","flipas"]},
+  cataluna:{label:"Cataluña",coach:"catalán, irónico, práctico y con sorna fina",trato:"nen",expres:["nen","noi","déu n'hi do","va","eh","home","apa","quin cràpula"]},
+  valencia:{label:"C. Valenciana",coach:"valenciano, fallero y con sorna",trato:"che",expres:["che","nano","au","fes","quin","collons (suave)","vinga","tio"]},
+  canarias:{label:"Canarias",coach:"canario, tranquilo y dicharachero",trato:"mi niño",expres:["mi niño","chacho","fó","agüita","cho","millo","qué pasó"]},
+  aragon:{label:"Aragón",coach:"maño, campechano y bonachón",trato:"maño",expres:["maño","chico","puej","ande vas","no te digo","recacha","apañao"]},
+  asturias:{label:"Asturias",coach:"asturiano, socarrón y noblote",trato:"neñu",expres:["ho","neñu","paisano","ye","prau","oye rapaz","calla ho"]},
+  murcia:{label:"Murcia",coach:"murciano, salado y echao p'alante",trato:"acho",expres:["acho","pijo","tas tonto o qué","llo","majo","anda ya"]},
+  galicia_castilla:{label:"Castilla",coach:"castellano, llano, seco y con sorna",trato:"majo",expres:["majo","hombre","anda","qué me dices","ni pa'trás","hala"]},
+  estandar:{label:"Estándar (sin acento)",coach:"cercano y motivador, con humor amable y sin acento marcado",trato:"campeón",expres:["campeón","crack","vamos","tú puedes","bien ahí","a por ello"]}
+};
+function reg(s){ return REGIONS[(s&&s.region)||"andalucia"]||REGIONS.andalucia; }
+function coachDe(s){ return reg(s).coach; }
+function saleroHint(s){
+  const r=reg(s);
+  const ex=[...r.expres].sort(()=>Math.random()-0.5).slice(0,4).join(", ");
+  const v=VIBES[Math.floor(Math.random()*VIBES.length)];
+  return ` Usa un tono ${v} y el humor típico de ${r.label}. Varía las expresiones de la zona (por ejemplo: ${ex}) y trata al usuario con naturalidad (como "${r.trato}" si encaja). NO repitas frases hechas ni empieces igual que otras veces; sé original y espontáneo. El humor es SIEMPRE cariñoso, nunca ofensivo ni sobre el cuerpo. Semilla de variación: ${Math.floor(Math.random()*1000000)}.`;
+}
+
+/* ================= ALMACENAMIENTO (localStorage) ================= */
+const store = {
+  get(k, def) { return new Promise(res => { try { const v = localStorage.getItem(k); res(v ? JSON.parse(v) : def); } catch { res(def); } }); },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  keys(prefix) { return new Promise(res => { try { res(Object.keys(localStorage).filter(k => k.indexOf(prefix) === 0)); } catch { res([]); } }); },
+};
+
+const METRICAS = [["peso","Peso","kg"],["cintura","Cintura","cm"],["cadera","Cadera","cm"],["pierna","Pierna","cm"],["brazo","Brazo","cm"]];
+const AGUA_MSG = [
+  "💧 ¡Pisha, échate un vaso de agua que estás más seco que el desierto de Tabernas!",
+  "💧 Ozú, ¿cuándo bebiste agua por última vez? ¡Venga, un vasito, mi arma!",
+  "💧 ¡Illo, hidrátate! Que el cuerpo no funciona a base de café solo.",
+  "💧 Agua va, quillo. Un vaso ahora mismo y tan campante.",
+  "💧 ¡Bebe agua, compae, que se te nota reseco desde aquí!",
+];
+const PICOTEO_MSG = [
+  "🙅 ¿Hambre entre horas, pisha? Bebe agua primero, que muchas veces es sed disfrazá.",
+  "🙅 Ozú, ni se te ocurra abrir la nevera. Una infusión y a otra cosa, mariposa.",
+  "🙅 ¡Quieto ahí, quillo! Antes de picar, un vaso de agua y espera 10 minutos.",
+  "🙅 Miarma, si es aburrimiento no es hambre. Date una vuelta y se te pasa.",
+  "🙅 ¡Fuera las manos del armario, compae! Una fruta si acaso, pero picoteo no.",
+];
+function speak(t){ try{ if(!("speechSynthesis" in window)) return; const u=new SpeechSynthesisUtterance(t); u.lang="es-ES"; u.rate=1.02; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }catch{} }
+
+/* ================= CÁLCULOS ================= */
+function bmr(p){ const kg=+p.peso, cm=+p.estatura, e=+p.edad; if(!kg||!cm||!e) return null; return 10*kg+6.25*cm-5*e+(p.sexo==="Mujer"?-161:5); }
+function tdeeDe(p){ const b=bmr(p); return b? b*(ACTIVIDAD[p.actividad]||1.375):null; }
+function objetivoCalorico(p){ const t=tdeeDe(p); if(!t) return null; const suelo=p.sexo==="Mujer"?1200:1500; return Math.max(Math.round(t-500),suelo); }
+function macrosObjetivo(t){ return { p:Math.round(t*0.30/4), c:Math.round(t*0.40/4), g:Math.round(t*0.30/9) }; }
+function aguaObjetivo(peso){ return Math.min(12,Math.max(6,Math.round(35*(+peso||60)/250))); }
+function imc(peso,est){ const m=(+est)/100; return m? +(((+peso)/(m*m)).toFixed(1)):null; }
+function imcCat(v){ if(v<18.5) return ["Bajo peso","var(--amber)"]; if(v<25) return ["Peso saludable","var(--green)"]; if(v<30) return ["Sobrepeso","var(--amber)"]; return ["Obesidad","var(--coral)"]; }
+function planCalculo(p){
+  if(!p.fechaObjetivo || !p.kgPerder) return null;
+  const hoy=new Date(); hoy.setHours(0,0,0,0);
+  const fin=new Date(p.fechaObjetivo+"T00:00:00");
+  const dias=Math.max(1,Math.round((fin-hoy)/86400000));
+  const semanas=dias/7;
+  const kg=+p.kgPerder;
+  const ritmoSemanal=+(kg/semanas).toFixed(2);
+  const tdee=tdeeDe(p); if(!tdee) return null;
+  const suelo=p.sexo==="Mujer"?1200:1500;
+  const deficit=(kg*7700)/dias;
+  let objetivo=Math.round(tdee-deficit);
+  const seguro = ritmoSemanal<=1 && objetivo>=suelo;
+  if(objetivo<suelo) objetivo=suelo;
+  return { dias, semanas:+semanas.toFixed(1), ritmoSemanal, tdee:Math.round(tdee), deficit:Math.round(deficit), objetivo, seguro, suelo };
+}
+function targetDe(p){ const pc=planCalculo(p); return pc? pc.objetivo : objetivoCalorico(p); }
+
+/* ================= IA ================= */
+async function callClaude({system,userText,imageB64,mediaType,key,temperature}){
+  const content=[]; if(imageB64) content.push({type:"image",source:{type:"base64",media_type:mediaType,data:imageB64}});
+  content.push({type:"text",text:userText});
+  const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:2000,temperature:temperature==null?0.7:temperature,system,messages:[{role:"user",content}]})});
+  const data=await res.json(); if(data.error) throw new Error(data.error.message||"Error de Claude");
+  return data.content.filter(b=>b.type==="text").map(b=>b.text).join("\n");
+}
+async function callGemini({system,userText,imageB64,mediaType,key,temperature}){
+  const parts=[{text:userText}]; if(imageB64) parts.push({inline_data:{mime_type:mediaType,data:imageB64}});
+  const body={contents:[{role:"user",parts}],generationConfig:{maxOutputTokens:2000,temperature:temperature==null?0.6:temperature}};
+  if(system) body.systemInstruction={parts:[{text:system}]};
+  const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(key)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const data=await res.json(); if(data.error) throw new Error(data.error.message||"Error de Gemini");
+  return (data.candidates && data.candidates[0] && data.candidates[0].content ? data.candidates[0].content.parts : []).map(p=>p.text||"").join("");
+}
+async function callAI(a){
+  const s=a.settings||{};
+  if(!s.geminiKey) throw new Error("Falta tu clave de Google (Gemini). Ábrela en Ajustes ⚙️."); return callGemini({...a,key:s.geminiKey});
+}
+function hasKey(s){ return !!s.geminiKey; }
+function parseJSON(txt){
+  let s=txt.replace(/```json|```/g,"").trim();
+  const a=s.indexOf("{"),b=s.lastIndexOf("}"),c=s.indexOf("["),d=s.lastIndexOf("]");
+  try{ if(a!==-1&&(c===-1||a<c)) return JSON.parse(s.slice(a,b+1)); if(c!==-1) return JSON.parse(s.slice(c,d+1)); return JSON.parse(s);}catch{ return null; }
+}
+const dkey=(d=new Date())=>d.toISOString().slice(0,10);
+const fmtFecha=()=>new Date().toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+const fmtCorta=(iso)=>new Date(iso+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"long"});
+
+/* ================= UI BÁSICOS ================= */
+function Spinner({big}){ return <span className={"spinner"+(big?" big":"")} />; }
+function SheetTitle({title,onClose}){ return (
+  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+    <div style={{fontFamily:"Fraunces",fontSize:19,fontWeight:600}}>{title}</div>
+    <button className="icon-btn" style={{width:32,height:32}} onClick={onClose}>✕</button>
+  </div>
+); }
+function Ring({consumed,target}){
+  const R=84,C=2*Math.PI*R, pct=target?Math.min(consumed/target,1):0, rem=target?target-consumed:0, over=rem<0;
+  return (
+    <div style={{position:"relative",width:200,height:200,margin:"0 auto"}}>
+      <svg width="200" height="200" style={{transform:"rotate(-90deg)"}}>
+        <circle cx="100" cy="100" r={R} fill="none" stroke="#EDEBE2" strokeWidth="16" />
+        <circle cx="100" cy="100" r={R} fill="none" stroke={over?"#E15A3C":"#2E7D4F"} strokeWidth="16" strokeLinecap="round" strokeDasharray={C} strokeDashoffset={C-C*pct} style={{transition:"stroke-dashoffset .6s ease"}} />
+      </svg>
+      <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+        <div style={{fontFamily:"Fraunces",fontSize:42,fontWeight:600,lineHeight:1,color:over?"#E15A3C":"#16261F"}}>{Math.abs(rem)}</div>
+        <div className="note" style={{marginTop:4}}>{over?"kcal de más":"kcal restantes"}</div>
+      </div>
+    </div>
+  );
+}
+function MacroBar({label,value,goal,color}){
+  const pct=goal?Math.min(value/goal,1)*100:0;
+  return (
+    <div style={{marginBottom:10}}>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:13}}><span style={{fontWeight:600}}>{label}</span><span className="muted">{Math.round(value)} / {goal} g</span></div>
+      <div className="bar-track"><div className="bar-fill" style={{width:pct+"%",background:color}} /></div>
+    </div>
+  );
+}
+function LineChartSVG({data}){
+  if(data.length<2) return <div className="empty" style={{padding:24}}>Registra tu peso al menos dos veces para ver la curva.</div>;
+  const W=300,H=170,padL=30,padR=8,padT=10,padB=22;
+  const vals=data.map(d=>d.value); let min=Math.min(...vals),max=Math.max(...vals); if(min===max){min-=1;max+=1;} const range=max-min;
+  const x=i=>padL+i*(W-padL-padR)/(data.length-1);
+  const y=v=>padT+(1-(v-min)/range)*(H-padT-padB);
+  const pts=data.map((d,i)=>x(i)+","+y(d.value)).join(" ");
+  return (
+    <svg viewBox={"0 0 "+W+" "+H} style={{width:"100%"}}>
+      {[max,(max+min)/2,min].map((v,i)=>{ const yy=padT+i*(H-padT-padB)/2; return (
+        <g key={i}><line x1={padL} x2={W-padR} y1={yy} y2={yy} stroke="#EDEBE2" /><text x={2} y={yy+3} fontSize="9" fill="#6E7B72">{v.toFixed(1)}</text></g>
+      );})}
+      <polyline points={pts} fill="none" stroke="#2E7D4F" strokeWidth="2.5" strokeLinejoin="round" />
+      {data.map((d,i)=><circle key={i} cx={x(i)} cy={y(d.value)} r="3" fill="#2E7D4F" />)}
+      {data.map((d,i)=>(i===0||i===data.length-1)?<text key={i} x={x(i)} y={H-4} fontSize="9" fill="#6E7B72" textAnchor="middle">{d.label}</text>:null)}
+    </svg>
+  );
+}
+function BarChartSVG({data,goal}){
+  const W=320,H=180,padL=24,padB=20,padT=6; const bw=(W-padL-4)/data.length;
+  const max=Math.max(goal||0,...data.map(d=>d.kcal),1);
+  const y=v=>padT+(1-v/max)*(H-padT-padB);
+  return (
+    <svg viewBox={"0 0 "+W+" "+H} style={{width:"100%"}}>
+      {goal?<line x1={padL} x2={W-2} y1={y(goal)} y2={y(goal)} stroke="#E15A3C" strokeDasharray="4 3" />:null}
+      {data.map((d,i)=>{ const bh=(d.kcal/max)*(H-padT-padB); return <rect key={i} x={padL+i*bw+1} y={H-padB-bh} width={Math.max(bw-2,1)} height={bh} rx="3" fill="#AEDC3C" />; })}
+      {data.map((d,i)=> i%2===0?<text key={i} x={padL+i*bw+bw/2} y={H-6} fontSize="8" fill="#6E7B72" textAnchor="middle">{d.etq}</text>:null)}
+    </svg>
+  );
+}
+
+/* ================= FELICITACIÓN / REGAÑINA / RESUMEN ================= */
+function ToastOle({text,onDone}){ useEffect(()=>{const t=setTimeout(onDone,2800); return ()=>clearTimeout(t);},[]); return <div className="toast fade" onClick={onDone}>🎉 {text}</div>; }
+
+function ReganoSheet({data,settings,onClose}){
+  const [loading,setLoading]=useState(true); const [res,setRes]=useState(null);
+  const fallback=()=>REGANO_FALLBACK[Math.floor(Math.random()*REGANO_FALLBACK.length)];
+  useEffect(()=>{ let vivo=true; (async()=>{
+    try{
+      const txt=await callAI({settings,temperature:1.0,system:"Eres un entrenador personal "+coachDe(settings)+". Regañas con guasa. El humor es SIEMPRE cariñoso y motivador, va sobre la comida y en plan colega; NUNCA te metes con el cuerpo de la persona ni la avergüenzas ni la culpabilizas. Promueves moverse por salud y disfrute, jamás como castigo."+saleroHint(settings),userText:`El usuario se ha zampado: "${data.food.nombre}" (${data.food.calorias} kcal, valoración: ${data.malo?"poco sano":"aceptable pero se ha pasado del objetivo"}). Lleva ${data.consumed} kcal de ${data.target}. Échale una regañina fresca y original con el humor de su tierra en 2-3 frases y proponle 3 ejercicios majos para compensar moviéndose, con minutos aproximados. Responde SOLO con JSON válido sin markdown: {"regano":"texto con salero","ejercicios":[{"nombre":"...","minutos":número,"busqueda_youtube":"término"}]}`});
+      const j=parseJSON(txt); if(vivo) setRes(j||fallback());
+    }catch{ if(vivo) setRes(fallback()); } finally{ if(vivo) setLoading(false); }
+  })(); return ()=>{vivo=false;}; },[]);
+  return (
+    <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
+      <SheetTitle title="¡Ay pisha…! 🫣" onClose={onClose} />
+      {loading? <div className="empty"><Spinner big/><br/>Preparándote la charla…</div> : (<>
+        <div className="regano-box">{res.regano}</div>
+        <div className="eyebrow" style={{margin:"18px 0 10px"}}>Pa' compensar, muévete un ratito</div>
+        {res.ejercicios.map((e,i)=>(
+          <div key={i} className="burn-item">
+            <div className="dot" style={{background:"var(--coral-soft)"}}>🏃</div>
+            <div style={{flex:1}}><div style={{fontWeight:600,fontSize:15}}>{e.nombre}</div>
+              <a className="yt" href={"https://www.youtube.com/results?search_query="+encodeURIComponent(e.busqueda_youtube)} target="_blank" rel="noreferrer" style={{marginTop:4}}>▶️ Ver en YouTube</a></div>
+            <div style={{fontFamily:"Fraunces",fontWeight:600,fontSize:15,whiteSpace:"nowrap"}}>{e.minutos} min</div>
+          </div>
+        ))}
+        <button className="btn btn-primary" style={{marginTop:18}} onClick={onClose}>Vale, pisha, me muevo</button>
+      </>)}
+    </div></div>
+  );
+}
+
+function ResumenSheet({active,log,exLog,consumed,burned,target,water,settings,onClose}){
+  const [loading,setLoading]=useState(true); const [texto,setTexto]=useState("");
+  const q=reg(settings).trato; const neto=consumed-burned; const balance=neto<=target;
+  useEffect(()=>{ let vivo=true; (async()=>{
+    try{
+      const comidas=log.length? log.map(f=>`${f.nombre} (${f.calorias} kcal${f.salud==="poco_sano"?", poco sano":""})`).join("; ") : "nada de nada";
+      const deportes=exLog.length? exLog.map(e=>`${e.nombre} ${e.minutos} min`).join("; ") : "ni el amago, cero deporte";
+      const txt=await callAI({settings,temperature:1.0,system:`Eres un comentarista ${coachDe(settings)}. Haces el resumen del día del usuario con guasa, tipo "${q}, has comío esto y encima no has hecho ni el amago de deporte, ¿qué más quieres? jaja". Cariñoso y motivador, NUNCA ofensivo ni sobre el cuerpo. Trátale de "${q}".`+saleroHint(settings),userText:`Haz un resumen del día fresco y original con el humor de su tierra (3-5 frases) y termina con una piquita motivadora. Datos de hoy:\n- Comidas: ${comidas}\n- Deporte: ${deportes}\n- Calorías comidas: ${consumed}, quemadas: ${burned}, netas: ${neto}, objetivo: ${target}\n- Agua: ${water} vasos\nResponde SOLO con el texto, sin comillas ni markdown.`});
+      if(vivo){ const limpio=txt.trim().replace(/^["']|["']$/g,""); setTexto(limpio); store.set("nf_resumen_"+active.id+"_"+dkey(),{fecha:dkey(),texto:limpio,neto,target,burned}); }
+    }catch(e){ if(vivo) setTexto(`Uy ${q}, hoy no puedo echarte la charla: ${e.message}`); } finally{ if(vivo) setLoading(false); }
+  })(); return ()=>{vivo=false;}; },[]);
+  return (
+    <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
+      <SheetTitle title="Resumen del día 🎤" onClose={onClose} />
+      <div className="row" style={{marginBottom:16}}>
+        <div className="macro"><b>{consumed}</b><span>Comidas</span></div>
+        <div className="macro"><b style={{color:"#2E7D4F"}}>−{burned}</b><span>Quemadas</span></div>
+        <div className="macro"><b style={{color:balance?"#2E7D4F":"#E15A3C"}}>{neto}</b><span>Netas</span></div>
+        <div className="macro"><b>{target}</b><span>Objetivo</span></div>
+      </div>
+      <div className="regano-box" style={{background:balance?"var(--lime-soft)":"var(--coral-soft)",color:balance?"#1E5A38":"#8a2f18"}}>{loading?"Cogiendo aire pa' soltarte la charla…":texto}</div>
+      <button className="btn btn-primary" style={{marginTop:18}} onClick={onClose}>¡Ea, hasta mañana!</button>
+    </div></div>
+  );
+}
+
+/* ================= AJUSTES ================= */
+function SettingsSheet({settings,save,onClose}){
+  const [gk,setGk]=useState(settings.geminiKey||""); const [region,setRegion]=useState(settings.region||"andalucia");
+  const aplicar=()=>{ save({provider:"gemini",geminiKey:gk.trim(),region}); onClose(); };
+  const pegar=async()=>{ try{ const t=await navigator.clipboard.readText(); if(t) setGk(t.trim()); }catch{ alert("Pega la clave a mano en el recuadro (mantén pulsado → Pegar)."); } };
+  return (
+    <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
+      <SheetTitle title="Inteligencia artificial y humor" onClose={onClose} />
+
+      <div className="field"><label>El humor de tu tierra 😜</label>
+        <select className="input" value={region} onChange={e=>setRegion(e.target.value)}>
+          {Object.keys(REGIONS).map(k=><option key={k} value={k}>{REGIONS[k].label}</option>)}
+        </select>
+      </div>
+      <p className="note" style={{marginBottom:18}}>La IA hablará con el acento y la guasa de la zona que elijas. Un andaluz no gasta las mismas bromas que un vasco 😉</p>
+
+      <p className="note" style={{marginBottom:10}}>La IA (Google Gemini, gratis) analiza tus fotos y crea consejos y planes. Solo necesitas pegar tu clave una vez:</p>
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer" className="btn btn-lime" style={{textDecoration:"none",marginBottom:12}}>🔑 1) Conseguir mi clave de Google (gratis)</a>
+      <div className="field"><label>2) Pega aquí tu clave</label><input className="input" value={gk} onChange={e=>setGk(e.target.value)} placeholder="AIza…" type="password" /></div>
+      <button className="btn btn-ghost" style={{marginBottom:8}} onClick={pegar}>📋 Pegar la clave copiada</button>
+      <p className="note">Se abre Google AI Studio, inicias sesión con tu cuenta de Google, pulsas <b>Crear clave de API</b>, la copias y vuelves aquí a pegarla. Se guarda solo en este teléfono; no la ve nadie más.</p>
+
+      <button className="btn btn-primary" style={{marginTop:18}} onClick={aplicar}>Guardar</button>
+    </div></div>
+  );
+}
+
+/* ================= AVISOS ================= */
+function RemindersSheet({reminders,save,onClose}){
+  const [r,setR]=useState(reminders);
+  const set=(k,v)=>setR(x=>({...x,[k]:v}));
+  const pedirPermiso=async()=>{ if(!("Notification" in window)){ alert("Tu navegador no soporta avisos."); return; } const p=await Notification.requestPermission(); if(p==="granted") new Notification("🔔 ¡Listo, pisha!",{body:"Avisos activados. Te recordaré lo del agua y el picoteo."}); };
+  const probar=()=>{ if("Notification" in window && Notification.permission==="granted") new Notification("Come sano, pisha",{body:AGUA_MSG[Math.floor(Math.random()*AGUA_MSG.length)]}); else alert("Primero activa los permisos de aviso."); };
+  const wa=()=>{ const msg=encodeURIComponent(AGUA_MSG[Math.floor(Math.random()*AGUA_MSG.length)]+"\n\n— Come sano, pisha"); const tel=(r.telefono||"").replace(/[^0-9]/g,""); window.open("https://wa.me/"+tel+"?text="+msg,"_blank"); };
+  const aplicar=()=>{ save(r); onClose(); };
+  const Sw=({on,onClick})=> <div className={"switch"+(on?" on":"")} onClick={onClick}><b/></div>;
+  return (
+    <div className="overlay" onClick={onClose}><div className="sheet" onClick={e=>e.stopPropagation()}>
+      <SheetTitle title="Avisos y recordatorios 🔔" onClose={onClose}/>
+      <p className="note" style={{marginBottom:14}}>Te recuerdo beber agua y no picar entre horas, con guasa. Los avisos del navegador suenan mientras la app esté abierta.</p>
+      <button className="btn btn-ghost" onClick={pedirPermiso} style={{marginBottom:14}}>🔔 Activar permisos de aviso</button>
+      <div className="rem-row"><div><div style={{fontWeight:600}}>Recordarme beber agua</div><div className="note">Cada {r.aguaCada||2} h</div></div><Sw on={r.agua} onClick={()=>set("agua",!r.agua)}/></div>
+      <div style={{padding:"10px 0"}}><div className="note" style={{marginBottom:4}}>Frecuencia del agua: cada {r.aguaCada||2} h</div>
+        <input type="range" min="1" max="4" step="1" value={r.aguaCada||2} onChange={e=>set("aguaCada",+e.target.value)} style={{width:"100%"}}/></div>
+      <div className="rem-row"><div><div style={{fontWeight:600}}>Anti-picoteo</div><div className="note">Avisos para no picar entre horas</div></div><Sw on={r.picoteo} onClick={()=>set("picoteo",!r.picoteo)}/></div>
+      <div className="rem-row"><div><div style={{fontWeight:600}}>Ventana de ayuno</div><div className="note">Avisar al abrir y cerrar (según tu método)</div></div><Sw on={r.ayunoAviso} onClick={()=>set("ayunoAviso",!r.ayunoAviso)}/></div>
+      <div className="row" style={{marginTop:10}}>
+        <div className="field"><label>Desde (h)</label><input className="input" type="number" min="0" max="23" value={r.desde==null?9:r.desde} onChange={e=>set("desde",+e.target.value)}/></div>
+        <div className="field"><label>Hasta (h)</label><input className="input" type="number" min="0" max="23" value={r.hasta==null?22:r.hasta} onChange={e=>set("hasta",+e.target.value)}/></div>
+      </div>
+      <button className="btn btn-ghost" onClick={probar} style={{marginBottom:14}}>👀 Probar un aviso ahora</button>
+      <div className="eyebrow" style={{margin:"6px 0 8px"}}>Enviar a WhatsApp</div>
+      <div className="field"><label>Tu número con prefijo (ej. 34600123456)</label><input className="input" value={r.telefono||""} onChange={e=>set("telefono",e.target.value)} placeholder="34600123456"/></div>
+      <button className="btn wa-btn" onClick={wa} disabled={!r.telefono}>🟢 Enviarme un recordatorio por WhatsApp</button>
+      <p className="note" style={{marginTop:8}}>Se abre WhatsApp con el mensaje listo; solo das a enviar. El envío 100% automático necesitaría un servidor.</p>
+      <button className="btn btn-primary" style={{marginTop:16}} onClick={aplicar}>Guardar</button>
+    </div></div>
+  );
+}
+
+/* ================= VOZ ================= */
+function VozComer({active,target,consumed,burned,settings,onAdd}){
+  const [estado,setEstado]=useState("idle"); const [texto,setTexto]=useState(""); const [resp,setResp]=useState(null);
+  const preguntar=async(t)=>{ setEstado("thinking"); const restantes=target-consumed+burned;
+    try{ const txt=await callAI({settings,temperature:1.0,system:"Eres un coach "+coachDe(settings)+"; ayudas a decidir si algo cabe en el día. Nunca ofensivo ni sobre el cuerpo."+saleroHint(settings),userText:`El usuario quiere comerse: "${t}". Le quedan ${restantes} kcal de su objetivo diario de ${target}. Estima las kcal de eso y decide con humor si le cabe (puede=true) o mejor no (puede=false, porque no cabe o es poco sano). Responde SOLO con JSON: {"nombre":"resumen corto","calorias":entero,"salud":"sano"|"moderado"|"poco_sano","puede":true|false,"respuesta":"1-2 frases con el humor de su tierra diciendo si puede o no y por qué"}`});
+      const j=parseJSON(txt); if(j){ setResp(j); speak(j.respuesta); } else setResp({respuesta:"No me he enterao bien, pisha. Repítelo."});
+    }catch(e){ setResp({respuesta:"Uy, fallo: "+e.message}); } finally{ setEstado("done"); } };
+  const escuchar=()=>{ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){ setResp({respuesta:"Tu navegador no soporta voz, pisha. Con Chrome funciona de lujo."}); setEstado("done"); return; }
+    const rec=new SR(); rec.lang="es-ES"; rec.interimResults=false; rec.maxAlternatives=1;
+    setEstado("listening"); setResp(null); setTexto("");
+    rec.onresult=(e)=>{ const t=e.results[0][0].transcript; setTexto(t); preguntar(t); };
+    rec.onerror=()=>setEstado("idle"); rec.onend=()=>setEstado(s=>s==="listening"?"idle":s);
+    try{ rec.start(); }catch{ setEstado("idle"); } };
+  const anadir=()=>{ if(resp&&resp.calorias){ onAdd({nombre:resp.nombre,calorias:resp.calorias,salud:resp.salud||"moderado"}); setResp(null); setTexto(""); setEstado("idle"); } };
+  return (
+    <div className="voz-card">
+      <div className="eyebrow" style={{marginBottom:12}}>🎙️ Pregúntame por voz</div>
+      <button className={"mic"+(estado==="listening"?" rec":"")} onClick={escuchar}>{estado==="thinking"?<Spinner/>:"🎤"}</button>
+      <div className="note" style={{marginTop:12}}>{estado==="listening"?"Escuchando… dime qué te vas a comer":estado==="thinking"?"Pensándolo con salero…":"Toca y di: “¿me puedo comer una hamburguesa?”"}</div>
+      {texto && <div style={{marginTop:12,fontWeight:600}}>“{texto}”</div>}
+      {resp && (
+        <div style={{marginTop:12}}>
+          {resp.puede!=null && <span className={"badge "+(resp.puede?"b-sano":"b-no")}>{resp.puede?"👍 ¡Puedes!":"👎 Mejor no"}</span>}
+          <p style={{marginTop:10,fontSize:15,lineHeight:1.5}}>{resp.respuesta}{resp.calorias?` (${resp.calorias} kcal)`:""}</p>
+          {resp.calorias>0 && <button className="btn btn-primary btn-sm" style={{marginTop:8}} onClick={anadir}>➕ Añadir a mi día</button>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ================= PLAN / OBJETIVO ================= */
+function PlanView({active,saveGoal,settings,back}){
+  const [fecha,setFecha]=useState(active.fechaObjetivo||"");
+  const [kg,setKg]=useState(active.kgPerder||"");
+  const [loading,setLoading]=useState(false); const [plan,setPlan]=useState(null); const [err,setErr]=useState(null);
+  useEffect(()=>{ store.get("nf_plan_"+active.id,null).then(setPlan); },[active.id]);
+  const pc=planCalculo({...active,fechaObjetivo:fecha,kgPerder:kg});
+  const guardarObjetivo=()=>{ if(fecha&&kg) saveGoal(fecha,+kg); };
+  const generar=async()=>{
+    if(!pc){ setErr("Pon una fecha futura y los kilos que quieres perder."); return; }
+    guardarObjetivo(); setLoading(true); setErr(null);
+    try{
+      const txt=await callAI({settings,system:"Eres nutricionista y entrenador personal. Creas planes seguros, realistas y sabrosos, adaptados a la persona. NUNCA propones dietas extremas ni por debajo de un mínimo saludable. Responde en español.",userText:`Crea un plan para ${active.nombre} (${active.sexo}, ${active.edad} años, ${active.peso} kg, ${active.estatura} cm, actividad ${active.actividad}). Objetivo: perder ${kg} kg en ${pc.dias} días (~${pc.ritmoSemanal} kg/semana). Calorías objetivo al día: ${pc.objetivo}. Zonas a trabajar: ${active.zonas.join(", ")||"general"}. Responde SOLO con JSON válido sin markdown:\n{"resumen":"1-2 frases motivadoras","comida":[{"momento":"Desayuno/Media mañana/Comida/Merienda/Cena","plato":"descripción","calorias":entero}],"ejercicio":[{"dia":"Lunes","actividad":"qué hacer o Descanso","minutos":entero,"busqueda_youtube":"término"}],"consejos":["tip1","tip2","tip3"]}\nEl plan de comida debe sumar aproximadamente ${pc.objetivo} kcal repartidas en el día. El de ejercicio son los 7 días de la semana (Lunes a Domingo, incluye 1-2 días de descanso).`});
+      const j=parseJSON(txt);
+      if(j){ setPlan(j); store.set("nf_plan_"+active.id,j); } else setErr("La IA devolvió algo raro. Prueba otra vez.");
+    }catch(e){ setErr(e.message); } finally{ setLoading(false); }
+  };
+  const totalComida = plan && plan.comida ? plan.comida.reduce((s,c)=>s+(+c.calorias||0),0) : 0;
+  return (
+    <div className="wrap fade">
+      <button className="link" style={{display:"flex",alignItems:"center",gap:6,marginBottom:14}} onClick={back}>← Volver</button>
+      <div className="eyebrow">Tu objetivo</div>
+      <h1 style={{fontSize:24,margin:"4px 0 16px",fontWeight:600}}>Plan para llegar a tu meta 🎯</h1>
+
+      <div className="card" style={{marginBottom:16}}>
+        <div className="row">
+          <div className="field" style={{marginBottom:0}}><label>Fecha objetivo</label><input className="input" type="date" value={fecha} onChange={e=>setFecha(e.target.value)} /></div>
+          <div className="field" style={{marginBottom:0}}><label>Kilos a perder</label><input className="input" type="number" inputMode="decimal" value={kg} onChange={e=>setKg(e.target.value)} placeholder="kg" /></div>
+        </div>
+      </div>
+
+      {pc && (
+        <div className="goal-card" style={{marginBottom:16}}>
+          <div className="row" style={{gap:16}}>
+            <div><div style={{fontSize:11,opacity:.85,textTransform:"uppercase",letterSpacing:1}}>Faltan</div><div className="big">{pc.dias}<span style={{fontSize:14}}> días</span></div></div>
+            <div><div style={{fontSize:11,opacity:.85,textTransform:"uppercase",letterSpacing:1}}>Ritmo</div><div className="big">{pc.ritmoSemanal}<span style={{fontSize:14}}> kg/sem</span></div></div>
+            <div><div style={{fontSize:11,opacity:.85,textTransform:"uppercase",letterSpacing:1}}>Comer/día</div><div className="big">{pc.objetivo}<span style={{fontSize:14}}> kcal</span></div></div>
+          </div>
+          <div style={{fontSize:13,opacity:.9,marginTop:12}}>Meta: perder {kg} kg antes del {fmtCorta(fecha)}.</div>
+        </div>
+      )}
+
+      {pc && !pc.seguro && (
+        <div className="warn" style={{marginBottom:16}}>⚠️ Ese ritmo es un pelín ambicioso, pisha. Lo saludable es perder hasta ~1 kg por semana. Puedes ampliar la fecha para ir más tranquilo. Aun así, te preparo un plan seguro sin bajar de {pc.suelo} kcal al día.</div>
+      )}
+
+      {err && <div className="warn" style={{marginBottom:16}}>{err}</div>}
+
+      <button className="btn btn-primary" onClick={generar} disabled={loading||!pc}>{loading? <><Spinner/> Creando tu plan…</> : <>✨ {plan?"Regenerar plan":"Generar plan con IA"}</>}</button>
+
+      {plan && !loading && (
+        <div className="fade" style={{marginTop:20}}>
+          {plan.resumen && <p style={{fontStyle:"italic",color:"var(--green-deep)",marginBottom:16}}>{plan.resumen}</p>}
+
+          <div className="card" style={{marginBottom:16}}>
+            <div className="eyebrow" style={{marginBottom:12}}>🍽️ Plan de comida (un día)</div>
+            {plan.comida.map((c,i)=>(
+              <div key={i} className="food-item">
+                <div className="dot" style={{background:"var(--lime-soft)"}}>🥗</div>
+                <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>{c.momento}</div><div className="note">{c.plato}</div></div>
+                <div style={{fontWeight:600,fontSize:13,whiteSpace:"nowrap"}}>{c.calorias} kcal</div>
+              </div>
+            ))}
+            <div className="note" style={{textAlign:"right",marginTop:8,fontWeight:600}}>Total: {totalComida} kcal</div>
+          </div>
+
+          <div className="card" style={{marginBottom:16}}>
+            <div className="eyebrow" style={{marginBottom:12}}>💪 Plan de ejercicio (semana)</div>
+            {plan.ejercicio.map((d,i)=>{ const descanso=/descan/i.test(d.actividad); return (
+              <div key={i} className="day-row">
+                <div className="day-tag">{d.dia}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:600,fontSize:14}}>{descanso?"😌 ":""}{d.actividad}{!descanso&&d.minutos?` · ${d.minutos} min`:""}</div>
+                  {!descanso && d.busqueda_youtube && <a className="yt" href={"https://www.youtube.com/results?search_query="+encodeURIComponent(d.busqueda_youtube)} target="_blank" rel="noreferrer">▶️ Ver en YouTube</a>}
+                </div>
+              </div>
+            );})}
+          </div>
+
+          {plan.consejos && (
+            <div className="card" style={{background:"var(--lime-soft)",border:"none"}}>
+              <div style={{fontWeight:700,fontSize:13,marginBottom:8}}>💡 Consejos clave</div>
+              {plan.consejos.map((c,i)=><div key={i} style={{fontSize:14,marginBottom:6,display:"flex",gap:8}}><span>•</span><span>{c}</span></div>)}
+            </div>
+          )}
+        </div>
+      )}
+      <p className="note" style={{marginTop:18}}>Plan orientativo generado por IA. Para pautas médicas personalizadas, consulta a un profesional de la nutrición.</p>
+    </div>
+  );
+}
+
+/* ================= HÁBITOS + PLAN PERSONALIZADO ================= */
+const HAB_DEF={comidas:"3",picoteo:"A veces",azucar:"Medio",alcohol:"Ocasional",cocina:"A veces",verdura:"2-3",deporteTxt:"",diasEntreno:"1-2",actividad:"Ligera",sueno:"6-7",calidadSueno:"Regular",estres:"Medio",cafeina:"Media"};
+const HAB_FIELDS=[
+  ["comidas","Comidas al día",["2","3","4","5 o más"]],
+  ["picoteo","¿Picas entre horas?",["Nunca","A veces","Mucho"]],
+  ["azucar","Dulces / azúcar",["Poco","Medio","Mucho"]],
+  ["alcohol","Alcohol",["No bebo","Ocasional","Frecuente"]],
+  ["cocina","¿Cocinas en casa?",["Casi siempre","A veces","Casi nunca"]],
+  ["verdura","Fruta/verdura al día",["0-1","2-3","4 o más"]],
+  ["diasEntreno","Días de deporte/semana",["0","1-2","3-4","5 o más"]],
+  ["actividad","Actividad diaria",["Sedentaria","Ligera","Activa","Muy activa"]],
+  ["sueno","Horas de sueño",["Menos de 6","6-7","7-8","Más de 8"]],
+  ["calidadSueno","Calidad del sueño",["Buena","Regular","Mala"]],
+  ["estres","Nivel de estrés",["Bajo","Medio","Alto"]],
+  ["cafeina","Cafeína",["Poca","Media","Mucha"]],
+];
+function ListaCard({titulo,emoji,items,bg}){
+  if(!items||!items.length) return null;
+  return (
+    <div className="card" style={{marginBottom:14,background:bg||"var(--card)",border:bg?"none":"1px solid var(--line)"}}>
+      <div style={{fontWeight:700,fontSize:13,marginBottom:10}}>{emoji} {titulo}</div>
+      {items.map((t,i)=><div key={i} style={{fontSize:14,lineHeight:1.5,marginBottom:8,display:"flex",gap:8}}><span>•</span><span>{t}</span></div>)}
+    </div>
+  );
+}
+function HabitosView({active,settings,back}){
+  const [h,setH]=useState(HAB_DEF); const [plan,setPlan]=useState(null); const [loading,setLoading]=useState(false); const [err,setErr]=useState(null);
+  useEffect(()=>{ store.get("nf_habitos_"+active.id,null).then(x=>{ if(x) setH({...HAB_DEF,...x}); }); store.get("nf_planpro_"+active.id,null).then(setPlan); },[active.id]);
+  const set=(k,v)=>setH(x=>({...x,[k]:v}));
+  const generar=async()=>{ store.set("nf_habitos_"+active.id,h); setLoading(true); setErr(null); const pc=planCalculo(active);
+    try{ const txt=await callAI({settings,temperature:0.55,system:"Eres un nutricionista y preparador físico que se basa en la evidencia científica actual: balance energético, prioridad de la proteína y el entrenamiento de fuerza, NEAT/pasos, y el papel del sueño, el estrés y el cortisol en la pérdida de grasa y la adherencia. Das consejos seguros, realistas y personalizados. NO inventes referencias ni cites estudios concretos con autor/año; explica mecanismos y consenso general. Nunca promuevas dietas extremas ni ayunos por debajo de lo saludable. Ante condiciones médicas, recomienda consultar a un profesional. Español.",
+      userText:`Crea un plan personalizado para ${active.nombre} (${active.sexo}, ${active.edad} años, ${active.peso} kg, ${active.estatura} cm). Objetivo diario: ${active.target} kcal${pc?`, meta perder ${active.kgPerder} kg en ${pc.dias} días`:""}. Zonas: ${active.zonas.join(", ")||"general"}.
+Hábitos: comidas/día ${h.comidas}; picoteo ${h.picoteo}; azúcar ${h.azucar}; alcohol ${h.alcohol}; cocina en casa ${h.cocina}; fruta/verdura ${h.verdura}; deporte que hace: "${h.deporteTxt||"no especifica"}"; días de entreno ${h.diasEntreno}; actividad diaria ${h.actividad}; sueño ${h.sueno} h, calidad ${h.calidadSueno}; estrés ${h.estres}; cafeína ${h.cafeina}.
+Adapta el entrenamiento AL DEPORTE QUE HACE. Responde SOLO con JSON válido sin markdown:
+{"resumen":"2-3 frases personalizadas","nutricion":["4-5 pautas concretas segun sus habitos"],"entrenamiento":["4-5 pautas adaptadas a su deporte y días"],"estilo_vida":["pautas de sueño, estrés/cortisol y pasos/NEAT"],"frenos":["3-4 motivos, según SUS hábitos, que pueden ralentizar su pérdida (p.ej. sueño escaso, estrés alto y cortisol, poca proteína, exceso de alcohol...)"],"ayuno":{"recomendado":true|false,"metodo":"12:12"|"14:10"|"16:8"|"ninguno","motivo":"por qué, adaptado a su caso"},"base_cientifica":["3-4 mecanismos explicados en 1 frase cada uno (proteína y saciedad/masa muscular, sueño y cortisol, déficit y adherencia, NEAT...)"]}`});
+      const j=parseJSON(txt); if(j){ setPlan(j); store.set("nf_planpro_"+active.id,j); } else setErr("La IA devolvió algo raro. Prueba otra vez.");
+    }catch(e){ setErr(e.message);} finally{ setLoading(false);} };
+  return (
+    <div className="wrap fade">
+      <button className="link" style={{display:"flex",alignItems:"center",gap:6,marginBottom:14}} onClick={back}>← Volver</button>
+      <div className="eyebrow">Coach con base científica</div>
+      <h1 style={{fontSize:24,margin:"4px 0 6px",fontWeight:600}}>Tu plan personalizado 🧬</h1>
+      <p className="note" style={{marginBottom:16}}>Cuéntame tus hábitos y el deporte que haces, y adapto el plan a ti: nutrición, entreno, y estilo de vida (sueño, estrés y cortisol).</p>
+
+      <div className="card" style={{marginBottom:14}}>
+        <div className="field"><label>¿Qué deporte(s) haces?</label><input className="input" placeholder="Ej. gimnasio 3 días y correr 2, o pádel, natación…" value={h.deporteTxt} onChange={e=>set("deporteTxt",e.target.value)} /></div>
+        {HAB_FIELDS.map(([k,label,opts])=>(
+          <div className="field" key={k} style={{marginBottom:12}}><label>{label}</label>
+            <select className="select" value={h[k]} onChange={e=>set(k,e.target.value)}>{opts.map(o=><option key={o}>{o}</option>)}</select></div>
+        ))}
+      </div>
+      {err && <div className="warn" style={{marginBottom:14}}>⚠️ {err}</div>}
+      <button className="btn btn-primary" onClick={generar} disabled={loading}>{loading?<><Spinner/> Creando tu plan…</>:<>✨ {plan?"Regenerar plan personalizado":"Generar mi plan personalizado"}</>}</button>
+
+      {plan && !loading && (
+        <div className="fade" style={{marginTop:20}}>
+          {plan.resumen && <p style={{fontStyle:"italic",color:"var(--green-deep)",marginBottom:16}}>{plan.resumen}</p>}
+          <ListaCard titulo="Nutrición" emoji="🥗" items={plan.nutricion} />
+          <ListaCard titulo="Entrenamiento (a tu deporte)" emoji="💪" items={plan.entrenamiento} />
+          <ListaCard titulo="Estilo de vida: sueño, estrés y cortisol" emoji="😴" items={plan.estilo_vida} bg="var(--blue-soft)" />
+          <ListaCard titulo="Lo que te está frenando" emoji="🐌" items={plan.frenos} bg="var(--coral-soft)" />
+          {plan.ayuno && (
+            <div className="card" style={{marginBottom:14,background:"var(--amber-soft)",border:"none"}}>
+              <div style={{fontWeight:700,fontSize:13,marginBottom:6}}>⏱️ Ayuno intermitente</div>
+              <div style={{fontSize:14,lineHeight:1.5}}>{plan.ayuno.recomendado?`Recomendado en tu caso: método ${plan.ayuno.metodo}. `:"De momento, mejor no priorizarlo. "}{plan.ayuno.motivo}</div>
+            </div>
+          )}
+          <ListaCard titulo="Por qué funciona (base científica)" emoji="🔬" items={plan.base_cientifica} bg="var(--lime-soft)" />
+          <p className="note">Recomendaciones basadas en el consenso científico general; son orientativas y no sustituyen a un médico o dietista-nutricionista, sobre todo si tienes alguna condición de salud.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ================= AYUNO INTERMITENTE ================= */
+const AYUNOS=[
+  ["12:12","12 h comiendo / 12 h en ayuno","El más suave, ideal para empezar. Separa cena y desayuno 12 h (p.ej. 20:00 → 08:00).",12],
+  ["14:10","14 h ayuno / 10 h comiendo","Un pasito más. Ventana de comida de 10 h (p.ej. 10:00–20:00).",10],
+  ["16:8","16 h ayuno / 8 h comiendo","El más popular. Ventana de 8 h (p.ej. 12:00–20:00): te saltas el desayuno o la cena.",8],
+  ["18:6","18 h ayuno / 6 h comiendo","Avanzado. Ventana de 6 h. Solo con experiencia y si te sienta bien.",6],
+];
+function AyunoView({active,settings,back}){
+  const [metodo,setMetodo]=useState("16:8"); const [inicio,setInicio]=useState(12); const [ahora,setAhora]=useState(new Date());
+  const [tip,setTip]=useState(null); const [tipLoad,setTipLoad]=useState(false);
+  useEffect(()=>{ store.get("nf_ayuno_"+active.id,null).then(x=>{ if(x){ setMetodo(x.metodo||"16:8"); setInicio(x.inicio==null?12:x.inicio); } }); },[active.id]);
+  useEffect(()=>{ const t=setInterval(()=>setAhora(new Date()),30000); return ()=>clearInterval(t); },[]);
+  const guardar=(m,i)=>{ setMetodo(m); setInicio(i); store.set("nf_ayuno_"+active.id,{metodo:m,inicio:i}); };
+  const horas=(AYUNOS.find(a=>a[0]===metodo)||AYUNOS[2])[3];
+  const finH=(inicio+horas)%24;
+  const hDec=ahora.getHours()+ahora.getMinutes()/60;
+  const enVentana = inicio<finH ? (hDec>=inicio&&hDec<finH) : (hDec>=inicio||hDec<finH);
+  let restante; if(enVentana){ let f=finH; if(f<=hDec) f+=24; restante=f-hDec; } else { let s=inicio; if(s<=hDec) s+=24; restante=s-hDec; }
+  const hh=Math.floor(restante), mm=Math.round((restante-hh)*60);
+  const consejo=async()=>{ setTipLoad(true);
+    try{ const txt=await callAI({settings,temperature:0.7,system:"Eres un nutricionista basado en evidencia, cercano y con un puntito del humor de "+reg(settings).label+". Explicas el ayuno intermitente de forma segura y realista, sin venderlo como milagro (su principal beneficio suele ser ayudar a controlar las calorías y la adherencia). Español.",userText:`Da 3 consejos prácticos para hacer bien el ayuno ${metodo} en el caso de ${active.nombre} (${active.sexo}, ${active.edad} años, objetivo ${active.target} kcal). Menciona qué tomar en el ayuno (agua, café solo, infusiones) y una señal para parar si sienta mal. Responde en texto plano, breve.`});
+      setTip(txt.trim());
+    }catch(e){ setTip("No se pudo generar: "+e.message);} finally{ setTipLoad(false);} };
+  return (
+    <div className="wrap fade">
+      <button className="link" style={{display:"flex",alignItems:"center",gap:6,marginBottom:14}} onClick={back}>← Volver</button>
+      <div className="eyebrow">Ayuno intermitente</div>
+      <h1 style={{fontSize:24,margin:"4px 0 6px",fontWeight:600}}>Come en tu ventana ⏱️</h1>
+      <p className="note" style={{marginBottom:16}}>El ayuno intermitente consiste en concentrar las comidas en una franja del día. No es magia: ayuda sobre todo porque facilita comer menos y con más orden. Elige tu método:</p>
+
+      <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:14}}>
+        {AYUNOS.map(a=><button key={a[0]} className={"metric-chip"+(metodo===a[0]?" on":"")} onClick={()=>guardar(a[0],inicio)}>{a[0]}</button>)}
+      </div>
+      <div className="card" style={{marginBottom:14}}>
+        <div style={{fontWeight:600,marginBottom:4}}>{(AYUNOS.find(a=>a[0]===metodo)||AYUNOS[2])[1]}</div>
+        <div className="note">{(AYUNOS.find(a=>a[0]===metodo)||AYUNOS[2])[2]}</div>
+        <div className="field" style={{marginTop:12,marginBottom:0}}><label>¿A qué hora empiezas a comer?</label>
+          <select className="select" value={inicio} onChange={e=>guardar(metodo,+e.target.value)}>{Array.from({length:24}).map((_,i)=><option key={i} value={i}>{String(i).padStart(2,"0")}:00</option>)}</select></div>
+      </div>
+
+      <div className="goal-card" style={{marginBottom:16,background:enVentana?"linear-gradient(135deg,#1E7A44,#2E9E5B)":"linear-gradient(135deg,#3a6ea5,#4f8cc9)"}}>
+        <div style={{fontSize:11,opacity:.85,textTransform:"uppercase",letterSpacing:1}}>{enVentana?"🍽️ Ventana de comida abierta":"🌙 En ayuno"}</div>
+        <div className="big" style={{marginTop:4}}>{hh}h {mm}min</div>
+        <div style={{fontSize:13,opacity:.9,marginTop:6}}>{enVentana?`Cierra a las ${String(finH).padStart(2,"0")}:00`:`Puedes comer a las ${String(inicio).padStart(2,"0")}:00`} · Ventana {String(inicio).padStart(2,"0")}:00–{String(finH).padStart(2,"0")}:00</div>
+      </div>
+
+      <button className="btn btn-primary" onClick={consejo} disabled={tipLoad}>{tipLoad?<><Spinner/> Pensando…</>:<>✨ Consejos para hacerlo bien</>}</button>
+      {tip && <div className="card" style={{marginTop:14,background:"var(--lime-soft)",border:"none",fontSize:14,lineHeight:1.55,whiteSpace:"pre-wrap"}}>{tip}</div>}
+
+      <div className="card" style={{marginTop:16}}>
+        <div className="eyebrow" style={{marginBottom:10}}>🔬 Lo que dice la ciencia (sin humo)</div>
+        <p style={{fontSize:14,lineHeight:1.55}}>La mayoría de estudios indican que el ayuno intermitente adelgaza <b>porque ayuda a comer menos calorías</b>, no por un efecto mágico: a igualdad de calorías y proteína, los resultados son parecidos a otras dietas. Puede mejorar la relación con el picoteo y ordenar las comidas. En el ayuno se puede tomar agua, café solo o infusiones sin azúcar.</p>
+      </div>
+      <div className="warn" style={{marginTop:14}}>⚠️ El ayuno <b>no es para todo el mundo</b>. Evítalo o consulta antes con tu médico si estás embarazada o en lactancia, eres menor, tienes diabetes con medicación, tomas fármacos con las comidas o tienes (o has tenido) un trastorno de la conducta alimentaria. Si te mareas, te sienta mal o te obsesiona, párate.</div>
+    </div>
+  );
+}
+
+/* ================= ENTRENADOR PERSONAL ================= */
+const ENT_DEF={lugar:"Casa sin equipo",dias:"3",tiempo:"30-45 min",nivel:"Principiante",limitaciones:""};
+const ENT_FIELDS=[
+  ["lugar","¿Dónde entrenas?",["Casa sin equipo","Casa con mancuernas","Gimnasio completo","Al aire libre"]],
+  ["dias","Días por semana",["2","3","4","5"]],
+  ["tiempo","Tiempo por sesión",["15-30 min","30-45 min","45-60 min","Más de 60 min"]],
+  ["nivel","Tu nivel",["Principiante","Intermedio","Avanzado"]],
+];
+function EntrenadorView({active,settings,back,onWorkoutDone}){
+  const [c,setC]=useState(ENT_DEF); const [plan,setPlan]=useState(null); const [loading,setLoading]=useState(false); const [err,setErr]=useState(null); const [dia,setDia]=useState(0); const [done,setDone]=useState([]);
+  useEffect(()=>{ store.get("nf_entreno_"+active.id,null).then(p=>{ if(p) setPlan(p); }); store.get("nf_entreno_cfg_"+active.id,null).then(x=>{ if(x) setC({...ENT_DEF,...x}); }); store.get("nf_entrenos_"+active.id,[]).then(setDone); },[active.id]);
+  const set=(k,v)=>setC(x=>({...x,[k]:v}));
+  const mondayOf=(iso)=>{ const x=new Date(iso+"T00:00:00"); const day=(x.getDay()+6)%7; x.setDate(x.getDate()-day); return dkey(x); };
+  const hoy=dkey(); const hechoHoy=done.indexOf(hoy)>-1; const goal=+c.dias||3;
+  const semKey=mondayOf(hoy); const estaSemana=done.filter(d=>mondayOf(d)===semKey).length;
+  const counts={}; done.forEach(d=>{const k=mondayOf(d);counts[k]=(counts[k]||0)+1;});
+  let streak=0; { let cur=new Date(semKey+"T00:00:00"); if((counts[dkey(cur)]||0)<goal) cur.setDate(cur.getDate()-7); while((counts[dkey(cur)]||0)>=goal){ streak++; cur.setDate(cur.getDate()-7);} }
+  const marcar=()=>{ let arr; if(hechoHoy){ arr=done.filter(d=>d!==hoy);} else { arr=[...done,hoy]; if(onWorkoutDone) onWorkoutDone(); } setDone(arr); store.set("nf_entrenos_"+active.id,arr); };
+  const generar=async()=>{ store.set("nf_entreno_cfg_"+active.id,c); setLoading(true); setErr(null); setDia(0);
+    try{ const txt=await callAI({settings,temperature:0.5,system:"Eres un entrenador personal de élite especializado en recomposición corporal (perder grasa y ganar músculo), basado en la evidencia. Diseñas rutinas seguras, progresivas y realistas. Priorizas técnica y progresión gradual. Español.",
+      userText:`Diseña una rutina para ${active.nombre} (${active.sexo}, ${active.edad} años, ${active.peso} kg, ${active.estatura} cm). Zonas de interés: ${active.zonas.join(", ")||"cuerpo completo"}. Entrena en: ${c.lugar}. ${c.dias} días/semana. ${c.tiempo} por sesión. Nivel: ${c.nivel}.${c.limitaciones?" Limitaciones/lesiones: "+c.limitaciones+".":""}
+Crea la rutina semanal (con exactamente ${c.dias} días de entreno) y una progresión de 4 semanas. Responde SOLO con JSON válido sin markdown:
+{"resumen":"2-3 frases motivadoras y realistas","dias":[{"titulo":"Día 1 · Nombre del enfoque","ejercicios":[{"nombre":"ejercicio","series":"ej. 3x12","descanso":"ej. 60s","busqueda_youtube":"término para ver la técnica"}]}],"progresion":[{"semana":1,"foco":"qué hacer esta semana"},{"semana":2,"foco":"..."},{"semana":3,"foco":"..."},{"semana":4,"foco":"..."}],"tecnica":["2-3 consejos de técnica y seguridad"],"porque_funciona":"1-2 frases explicando por qué esta estructura funciona"}
+Máximo 5-6 ejercicios por día. Adapta los ejercicios al lugar indicado (si es sin equipo, peso corporal).`});
+      const j=parseJSON(txt); if(j&&j.dias){ setPlan(j); store.set("nf_entreno_"+active.id,j); } else setErr("La IA devolvió algo raro. Prueba otra vez.");
+    }catch(e){ setErr(e.message); } finally{ setLoading(false); } };
+  return (
+    <div className="wrap fade">
+      <button className="link" style={{display:"flex",alignItems:"center",gap:6,marginBottom:14}} onClick={back}>← Volver</button>
+      <div className="eyebrow">Entrenador personal</div>
+      <h1 style={{fontSize:24,margin:"4px 0 6px",fontWeight:600}}>Tu rutina a medida 🏋️</h1>
+      <p className="note" style={{marginBottom:16}}>Dime cómo y dónde entrenas y te monto una rutina progresiva de 4 semanas, con ejercicios, series, descansos y vídeos de técnica.</p>
+
+      <div className="card" style={{marginBottom:14,display:"flex",alignItems:"center",gap:12}}>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:13,marginBottom:2}}>🔥 Tus entrenos</div>
+          <div className="note">Esta semana {estaSemana}/{goal} · Racha {streak} sem · Total {done.length}</div>
+        </div>
+        <button className={"btn btn-sm "+(hechoHoy?"btn-lime":"btn-primary")} onClick={marcar}>{hechoHoy?"✔️ Hecho hoy":"Marcar hoy"}</button>
+      </div>
+
+      <div className="card" style={{marginBottom:14}}>
+        {ENT_FIELDS.map(([k,label,opts])=>(
+          <div className="field" key={k} style={{marginBottom:12}}><label>{label}</label>
+            <select className="select" value={c[k]} onChange={e=>set(k,e.target.value)}>{opts.map(o=><option key={o}>{o}</option>)}</select></div>
+        ))}
+        <div className="field" style={{marginBottom:0}}><label>Lesiones o limitaciones (opcional)</label><input className="input" placeholder="Ej. cuido la rodilla, hombro delicado…" value={c.limitaciones} onChange={e=>set("limitaciones",e.target.value)} /></div>
+      </div>
+      {err && <div className="warn" style={{marginBottom:14}}>⚠️ {err}</div>}
+      <button className="btn btn-primary" onClick={generar} disabled={loading}>{loading?<><Spinner/> Diseñando tu rutina…</>:<>✨ {plan?"Rehacer mi rutina":"Crear mi rutina"}</>}</button>
+
+      {plan && !loading && (
+        <div className="fade" style={{marginTop:20}}>
+          {plan.resumen && <p style={{fontStyle:"italic",color:"var(--green-deep)",marginBottom:16}}>{plan.resumen}</p>}
+          <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:14}}>
+            {plan.dias.map((d,i)=><button key={i} className={"metric-chip"+(dia===i?" on":"")} onClick={()=>setDia(i)}>Día {i+1}</button>)}
+          </div>
+          {plan.dias[dia] && (
+            <div className="card" style={{marginBottom:16}}>
+              <div style={{fontFamily:"Fraunces",fontSize:18,fontWeight:600,marginBottom:10}}>{plan.dias[dia].titulo}</div>
+              {plan.dias[dia].ejercicios.map((e,i)=>(
+                <div key={i} className="ex-card" style={{marginBottom:10}}>
+                  <div style={{fontWeight:600,fontSize:15}}>{e.nombre}</div>
+                  <div style={{display:"flex",gap:14,marginTop:4,fontSize:13}}><span style={{color:"var(--green)",fontWeight:600}}>{e.series}</span><span className="muted">Descanso {e.descanso}</span></div>
+                  <a className="yt" href={"https://www.youtube.com/results?search_query="+encodeURIComponent(e.busqueda_youtube)} target="_blank" rel="noreferrer">▶️ Ver técnica</a>
+                </div>
+              ))}
+            </div>
+          )}
+          {plan.progresion && (
+            <div className="card" style={{marginBottom:14}}>
+              <div className="eyebrow" style={{marginBottom:10}}>📈 Progresión de 4 semanas</div>
+              {plan.progresion.map((p,i)=>(
+                <div key={i} className="day-row"><div className="day-tag">Sem {p.semana}</div><div style={{flex:1,fontSize:14}}>{p.foco}</div></div>
+              ))}
+            </div>
+          )}
+          <ListaCard titulo="Técnica y seguridad" emoji="🎯" items={plan.tecnica} />
+          {plan.porque_funciona && <div className="card" style={{background:"var(--lime-soft)",border:"none"}}><div style={{fontWeight:700,fontSize:13,marginBottom:4}}>🔬 Por qué funciona</div><div style={{fontSize:14,lineHeight:1.5}}>{plan.porque_funciona}</div></div>}
+          <p className="note" style={{marginTop:14}}>Empieza con cargas y repeticiones que puedas controlar con buena técnica. Si algo te duele (más allá del esfuerzo normal), para y consulta a un profesional.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ================= SNACKS ANTI-ANTOJOS ================= */
+function SnacksSaciantes({active,settings,onAdd}){
+  const [loading,setLoading]=useState(false); const [snacks,setSnacks]=useState(null); const [err,setErr]=useState(null); const [added,setAdded]=useState({});
+  const generar=async()=>{ setLoading(true); setErr(null);
+    try{ const txt=await callAI({settings,temperature:0.7,system:"Eres un nutricionista práctico especializado en snacks para pérdida de grasa. Español.",userText:`Dame 8 snacks altos en proteína (mínimo 10 g) y menos de 200 kcal, mezclando opciones caseras y comprables. Para cada uno incluye kcal, proteína y saciedad. Responde SOLO con JSON: {"snacks":[{"nombre":"...","calorias":entero,"proteinas":entero,"casero":true|false,"saciedad":"alta"|"media"}]}`});
+      const j=parseJSON(txt); if(j&&j.snacks) setSnacks(j.snacks); else setErr("No salió bien, prueba otra vez.");
+    }catch(e){ setErr(e.message); } finally{ setLoading(false); } };
+  return (
+    <div className="card" style={{marginTop:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:snacks?12:0}}>
+        <div style={{fontWeight:700,fontSize:13}}>🥜 Snacks saciantes (alta proteína)</div>
+        <button className="link" onClick={generar} disabled={loading}>{loading?"…":(snacks?"Otros":"Dame ideas")}</button>
+      </div>
+      {err && <div className="warn" style={{marginTop:8}}>⚠️ {err}</div>}
+      {snacks && snacks.map((s,i)=>(
+        <div key={i} className="food-item">
+          <div className="dot" style={{background:"var(--lime-soft)"}}>{s.casero?"🏠":"🛒"}</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>{s.nombre}</div><div className="note">{s.calorias} kcal · {s.proteinas}g proteína · saciedad {s.saciedad}</div></div>
+          <button className="link" onClick={()=>{ onAdd({nombre:s.nombre,calorias:s.calorias,proteinas:s.proteinas,carbos:0,grasas:0,salud:"sano"}); setAdded(a=>({...a,[i]:true})); }}>{added[i]?"✔️":"➕"}</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ================= PEPE EL CERDITO (mascota) ================= */
+function cerdoLevel(n){ if(n<15)return 0; if(n<35)return 1; if(n<55)return 2; if(n<78)return 3; return 4; }
+const CERDO_MSG=[
+  ["¡Oink oink! Mírame, hecho un chulazo gracias a ti, pisha 💪","¡Estoy fino filipino, quillo! Sigue así.","Delgadito y feliz, mi arma. ¡Ole tú!"],
+  ["Voy bien, pisha, pero no te me confíes.","Oink, de momento en mi peso. ¡A seguir!","Tirando bien, quillo, no me despistes."],
+  ["Ejem… noto el pantalón un pelín justo, ¿eh?","Como te despistes, empiezo a redondearme, illo.","Oink… que se me ve un flotadorcillo, cuidao."],
+  ["¡Oink! Que estoy cogiendo lorzas, pisha. Ponme a dieta ya.","Me cuesta verme los pezuñas, quillo… ¡ayúdame!","Que reboto un poquito al andar, mi arma. Sácame a pasear."],
+  ["¡SOCORRO! Que estoy como una bola, pisha 😰 Registra algo sano o sácame a andar YA.","No quepo por la puerta, mi arma. ¡Necesito una ensalada urgente!","¡Oink de emergencia! Como sigas sin dieta, exploto, quillo 🐷💥"],
+];
+function Cerdito({nivel}){
+  const lvl=cerdoLevel(nivel); const forma=Math.max(0,100-nivel);
+  const size=Math.round(46+(nivel/100)*48);
+  const acc=lvl===0?"💪":lvl===3?"🍔":lvl>=4?"😰":"";
+  const [n,setN]=useState(0);
+  const msg=React.useMemo(()=>{ const p=CERDO_MSG[lvl]; return p[Math.floor(Math.random()*p.length)]; },[lvl,n]);
+  const barColor=lvl<=1?"var(--green)":lvl===2?"var(--amber)":"var(--coral)";
+  return (
+    <div className="card" style={{marginTop:16,display:"flex",gap:14,alignItems:"center"}}>
+      <div style={{lineHeight:1,textAlign:"center",minWidth:96}}>
+        <div style={{fontSize:size}}>🐷</div>{acc&&<div style={{fontSize:20,marginTop:-4}}>{acc}</div>}
+      </div>
+      <div style={{flex:1}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div style={{fontWeight:700,fontSize:14}}>Pepe el cerdito</div>
+          <button className="icon-btn" style={{width:28,height:28,border:"none",background:"transparent"}} onClick={()=>setN(x=>x+1)}>🔄</button>
+        </div>
+        <div style={{fontSize:13,lineHeight:1.45,marginTop:2}}>{msg}</div>
+        <div className="note" style={{marginTop:6,marginBottom:3}}>Forma física de Pepe</div>
+        <div className="bar-track"><div className="bar-fill" style={{width:forma+"%",background:barColor}}/></div>
+      </div>
+    </div>
+  );
+}
+
+/* ================= INICIO ================= */
+function NoProfile({go}){ return (
+  <div className="wrap fade"><div className="card empty" style={{paddingTop:44,paddingBottom:44}}>
+    <div style={{fontSize:34,marginBottom:12,opacity:.5}}>👤</div>
+    <div style={{fontFamily:"Fraunces",fontSize:20,color:"var(--ink)",marginBottom:6}}>Crea tu primer perfil</div>
+    <p className="note" style={{maxWidth:260,margin:"0 auto 18px"}}>Con tu edad, peso y estatura calculamos tu objetivo diario.</p>
+    <button className="btn btn-primary" style={{maxWidth:220,margin:"0 auto"}} onClick={()=>go("perfiles")}>➕ Empezar</button>
+  </div></div>
+); }
+function FoodRow({f,onRemove}){
+  const color=f.salud==="sano"?"var(--lime-soft)":f.salud==="poco_sano"?"var(--coral-soft)":"var(--amber-soft)";
+  const emo=f.salud==="poco_sano"?"🍔":f.salud==="sano"?"🥗":"🍽️";
+  return (
+    <div className="food-item">
+      <div className="dot" style={{background:color}}>{emo}</div>
+      <div style={{flex:1}}><div style={{fontWeight:600,fontSize:15}}>{f.nombre}</div><div className="note">{f.calorias} kcal{f.proteinas?` · P ${f.proteinas} · C ${f.carbos} · G ${f.grasas}`:""}</div></div>
+      {onRemove && <button onClick={()=>onRemove(f.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#B4AEA0",fontSize:16}}>🗑️</button>}
+    </div>
+  );
+}
+function Inicio({active,consumed,target,macrosHoy,log,water,setAgua,onRemove,go,settings,burned,openResumen,openPlan,cerdo}){
+  const [tip,setTip]=useState(null); const [tipLoad,setTipLoad]=useState(false);
+  const [reto,setReto]=useState(null); const [retoLoad,setRetoLoad]=useState(false);
+  const macros=active?(active.macros||macrosObjetivo(target)):null;
+  const aguaGoal=active?(active.aguaGoal||aguaObjetivo(active.peso)):8;
+  const pc=active?planCalculo(active):null;
+  const genTip=async(silent)=>{ if(!active) return; setTipLoad(true);
+    try{ const txt=await callAI({settings,temperature:0.95,system:"Eres un coach de nutrición y fitness cercano y motivador con un puntito del humor de "+reg(settings).label+". Responde en español, breve y sin repetir siempre lo mismo."+saleroHint(settings),userText:`Da UN consejo del día original (máx 2 frases) para ${active.nombre}, ${active.edad} años, objetivo ${target} kcal, hoy lleva ${consumed} kcal, quiere trabajar: ${active.zonas.join(", ")||"salud general"}. Responde SOLO con el texto del consejo, sin comillas.`});
+      const clean=txt.trim().replace(/^["']|["']$/g,""); setTip(clean); store.set("nf_tip_"+active.id+"_"+dkey(),clean);
+    }catch(e){ if(!silent) setTip("No se pudo generar el consejo: "+e.message); } finally{ setTipLoad(false); }
+  };
+  const genReto=async()=>{ if(!active) return; setRetoLoad(true);
+    try{ const txt=await callAI({settings,temperature:1.0,system:"Eres un coach de alto rendimiento especializado en disciplina y constancia, directo y motivador, con un puntito del humor de "+reg(settings).label+". Refuerzas identidad y hábitos sin clichés vacíos ni frases que humillen. Español."+saleroHint(settings),userText:`Dale a ${active.nombre} un MINI RETO para hoy (1 sola acción concreta y realista, relacionada con moverse, comer bien o descansar) y UNA frase de motivación corta y potente. Responde SOLO con JSON: {"reto":"la acción de hoy","frase":"frase motivadora breve"}`});
+      const j=parseJSON(txt); if(j){ setReto(j); store.set("nf_reto_"+active.id+"_"+dkey(),j); }
+    }catch(e){} finally{ setRetoLoad(false); }
+  };
+  useEffect(()=>{ if(!active) return; let go=true;
+    (async()=>{ const c=await store.get("nf_tip_"+active.id+"_"+dkey(),null); if(c){ if(go) setTip(c); return; } if(hasKey(settings)) genTip(true); })();
+    store.get("nf_reto_"+active.id+"_"+dkey(),null).then(r=>{ if(r&&go) setReto(r); });
+    return ()=>{go=false;};
+  },[active&&active.id]);
+  if(!active) return <NoProfile go={go} />;
+  const iv=imc(active.peso,active.estatura), cat=iv?imcCat(iv):null;
+  return (
+    <div className="wrap fade">
+      <div className="eyebrow">{fmtFecha()}</div>
+      <h1 style={{fontSize:26,margin:"4px 0 18px",fontWeight:600}}>Hola, {active.nombre}</h1>
+
+      <div className="card" style={{textAlign:"center"}}>
+        <Ring consumed={consumed-burned} target={target} />
+        <div className="row" style={{marginTop:18}}>
+          <div className="macro"><b>{consumed}</b><span>Comidas</span></div>
+          <div className="macro"><b style={{color:"#2E7D4F"}}>−{burned}</b><span>Quemadas</span></div>
+          <div className="macro"><b>{Math.max(target-consumed+burned,0)}</b><span>Restantes</span></div>
+        </div>
+      </div>
+
+      <Cerdito nivel={cerdo} />
+
+      <div className="goal-card" style={{marginTop:16,cursor:"pointer"}} onClick={openPlan}>
+        {pc? (<>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div><div style={{fontSize:11,opacity:.85,textTransform:"uppercase",letterSpacing:1}}>Tu objetivo</div>
+              <div style={{fontFamily:"Fraunces",fontSize:20,fontWeight:600,marginTop:2}}>Perder {active.kgPerder} kg</div></div>
+            <div style={{textAlign:"right"}}><div className="big">{pc.dias}</div><div style={{fontSize:11,opacity:.85}}>días restantes</div></div>
+          </div>
+          <div style={{fontSize:12,opacity:.9,marginTop:10}}>Toca para ver tu plan de comida y ejercicio →</div>
+        </>):(<>
+          <div style={{fontFamily:"Fraunces",fontSize:18,fontWeight:600}}>🎯 Ponte un objetivo</div>
+          <div style={{fontSize:13,opacity:.9,marginTop:6}}>Fija una fecha y los kilos a perder y te creo un plan de comida y ejercicio. Toca aquí →</div>
+        </>)}
+      </div>
+
+      <div className="card" style={{marginTop:16}}>
+        <div className="eyebrow" style={{marginBottom:12}}>🧬 Tu coach con base científica</div>
+        <button className="btn btn-primary" style={{marginBottom:10}} onClick={()=>go("entrenador")}>🏋️ Entrenador personal</button>
+        <button className="btn btn-ghost" style={{marginBottom:10}} onClick={()=>go("habitos")}>📋 Plan personalizado (tus hábitos)</button>
+        <button className="btn btn-ghost" onClick={()=>go("ayuno")}>⏱️ Ayuno intermitente</button>
+      </div>
+
+      <div className="card" style={{marginTop:16,background:"var(--lime-soft)",border:"none"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+          <div style={{display:"flex",alignItems:"center",gap:7,fontWeight:700,fontSize:13}}>💡 Consejo del día</div>
+          <button className="icon-btn" style={{width:30,height:30,background:"transparent",border:"none"}} onClick={()=>genTip(false)} disabled={tipLoad}>{tipLoad?<Spinner/>:"🔄"}</button>
+        </div>
+        <p style={{fontSize:14,lineHeight:1.5}}>{tipLoad&&!tip?"Pensando un consejo para ti…":(tip||"Toca 🔄 para recibir un consejo (añade tu clave en Ajustes ⚙️).")}</p>
+      </div>
+
+      <div className="card" style={{marginTop:16,background:"linear-gradient(135deg,#1E7A44,#2E9E5B)",color:"#fff",border:"none"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+          <div style={{display:"flex",alignItems:"center",gap:7,fontWeight:700,fontSize:13}}>🔥 Reto del día</div>
+          <button className="icon-btn" style={{width:30,height:30,background:"rgba(255,255,255,.2)",border:"none",color:"#fff"}} onClick={genReto} disabled={retoLoad}>{retoLoad?<Spinner/>:"🔄"}</button>
+        </div>
+        {reto? (<>
+          <div style={{fontWeight:600,fontSize:15}}>✅ {reto.reto}</div>
+          <div style={{fontSize:13,opacity:.92,marginTop:6,fontStyle:"italic"}}>“{reto.frase}”</div>
+        </>) : <div style={{fontSize:14,opacity:.92}}>Toca 🔄 para tu mini reto y frase de hoy.</div>}
+      </div>
+
+      <div className="card" style={{marginTop:16}}>
+        <div className="eyebrow" style={{marginBottom:12}}>Macros de hoy</div>
+        <MacroBar label="Proteínas" value={macrosHoy.p} goal={macros.p} color="var(--green)" />
+        <MacroBar label="Carbohidratos" value={macrosHoy.c} goal={macros.c} color="var(--amber)" />
+        <MacroBar label="Grasas" value={macrosHoy.g} goal={macros.g} color="var(--coral)" />
+      </div>
+
+      <div className="row" style={{marginTop:16}}>
+        <div className="card" style={{padding:16}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,fontWeight:600,fontSize:13,marginBottom:8}}>💧 Agua</div>
+          <div style={{fontFamily:"Fraunces",fontSize:22,fontWeight:600}}>{water}<span style={{fontSize:13,color:"var(--muted)"}}> / {aguaGoal} vasos</span></div>
+          <div style={{display:"flex",gap:8,marginTop:10}}>
+            <button className="btn btn-ghost btn-sm" style={{flex:1}} onClick={()=>setAgua(water-1)}>➖</button>
+            <button className="btn btn-lime btn-sm" style={{flex:1}} onClick={()=>setAgua(water+1)}>➕</button>
+          </div>
+        </div>
+        <div className="card" style={{padding:16}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,fontWeight:600,fontSize:13,marginBottom:8}}>❤️ IMC</div>
+          <div style={{fontFamily:"Fraunces",fontSize:22,fontWeight:600}}>{iv||"—"}</div>
+          {cat && <span className="badge" style={{background:"var(--paper)",color:cat[1],marginTop:6}}>{cat[0]}</span>}
+        </div>
+      </div>
+
+      <div className="row" style={{marginTop:16}}>
+        <button className="btn btn-primary" onClick={()=>go("camara")}>📷 Foto</button>
+        <button className="btn btn-lime" onClick={()=>go("menu")}>➕ Comida</button>
+      </div>
+      <button className="btn btn-ghost" style={{marginTop:12}} onClick={openResumen}>🎤 Resumen del día con guasa</button>
+
+      <div style={{marginTop:24}}>
+        <div className="eyebrow" style={{marginBottom:12}}>Comidas de hoy</div>
+        <div className="card">{log.length===0?<div className="empty">🍎<br/>Aún no has registrado nada hoy.</div>:log.map(f=><FoodRow key={f.id} f={f} onRemove={onRemove} />)}</div>
+      </div>
+      <p className="note" style={{marginTop:18}}>Las estimaciones son orientativas. Para un plan personalizado, consulta a un profesional.</p>
+    </div>
+  );
+}
+
+/* ================= CÁMARA ================= */
+function Camara({active,onAdd,settings}){
+  const [img,setImg]=useState(null),[b64,setB64]=useState(null),[mime,setMime]=useState(null);
+  const [loading,setLoading]=useState(false),[result,setResult]=useState(null),[error,setError]=useState(null),[added,setAdded]=useState(false);
+  const fileRef=useRef();
+  const pick=(e)=>{ const file=e.target.files[0]; if(!file) return; setResult(null); setError(null); setAdded(false);
+    const r=new FileReader(); r.onload=()=>{ setImg(r.result); setB64(r.result.split(",")[1]); setMime(file.type||"image/jpeg"); }; r.readAsDataURL(file); };
+  const analyze=async()=>{ setLoading(true); setError(null); setResult(null);
+    try{ const txt=await callAI({settings,system:"Eres un nutricionista experto. Analiza la comida de la foto de forma realista.",userText:`Analiza el plato de la imagen y responde SOLO con JSON válido, sin markdown:\n{"alimento":"nombre corto","salud":"sano"|"moderado"|"poco_sano","calorias":entero,"proteinas":número,"carbos":número,"grasas":número,"explicacion":"1-2 frases","consejo":"1 frase"}\nSi no hay comida: {"alimento":"No se detecta comida","salud":"moderado","calorias":0,"proteinas":0,"carbos":0,"grasas":0,"explicacion":"No se ve comida.","consejo":"Enfoca el plato."}`,imageB64:b64,mediaType:mime});
+      const j=parseJSON(txt); if(!j) throw new Error("La IA devolvió algo raro. Prueba otra vez."); setResult(j);
+    }catch(e){ setError(e.message); } finally{ setLoading(false); } };
+  const guardar=()=>{ onAdd({nombre:result.alimento,calorias:result.calorias,proteinas:result.proteinas,carbos:result.carbos,grasas:result.grasas,salud:result.salud}); setAdded(true); };
+  if(!active) return <div className="wrap"><div className="card empty">Crea un perfil para usar la cámara.</div></div>;
+  const L={sano:["Sano","b-sano"],moderado:["Moderado","b-mod"],poco_sano:["Poco sano","b-no"]};
+  return (
+    <div className="wrap fade">
+      <div className="eyebrow">Analizar comida</div>
+      <h1 style={{fontSize:24,margin:"4px 0 16px",fontWeight:600}}>Hazle una foto al plato</h1>
+      <input ref={fileRef} style={{display:"none"}} type="file" accept="image/*" capture="environment" onChange={pick} />
+      {!img?(
+        <div className="card" style={{textAlign:"center",padding:"44px 20px",cursor:"pointer",borderStyle:"dashed"}} onClick={()=>fileRef.current.click()}>
+          <div className="dot" style={{width:60,height:60,margin:"0 auto 14px",background:"var(--lime-soft)",fontSize:28}}>📷</div>
+          <div style={{fontWeight:600,marginBottom:4}}>Abrir cámara o galería</div>
+          <p className="note">Enfoca el plato para estimar si es sano y sus calorías.</p>
+        </div>
+      ):(<>
+        <img src={img} alt="comida" className="preview-img" />
+        <div className="row" style={{marginTop:12}}>
+          <button className="btn btn-ghost" onClick={()=>fileRef.current.click()}>Cambiar</button>
+          <button className="btn btn-primary" onClick={analyze} disabled={loading}>{loading?<><Spinner/> Analizando…</>:<>✨ Analizar</>}</button>
+        </div>
+      </>)}
+      {error && <div className="warn" style={{marginTop:14}}>⚠️ {error}</div>}
+      {result && (
+        <div className="card fade" style={{marginTop:16}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{fontFamily:"Fraunces",fontSize:20,fontWeight:600}}>{result.alimento}</div>
+            <span className={"badge "+L[result.salud][1]}>{L[result.salud][0]}</span>
+          </div>
+          <div style={{fontFamily:"Fraunces",fontSize:38,fontWeight:600,margin:"10px 0 2px"}}>{result.calorias} <span style={{fontSize:16,fontFamily:"Inter",color:"var(--muted)"}}>kcal</span></div>
+          <div className="row" style={{marginTop:14}}>
+            <div className="macro"><b>{result.proteinas}g</b><span>Proteína</span></div>
+            <div className="macro"><b>{result.carbos}g</b><span>Carbos</span></div>
+            <div className="macro"><b>{result.grasas}g</b><span>Grasa</span></div>
+          </div>
+          <p style={{marginTop:14,fontSize:14,lineHeight:1.5}}>{result.explicacion}</p>
+          <p className="note" style={{marginTop:6}}>💡 {result.consejo}</p>
+          <button className="btn btn-primary" style={{marginTop:16}} onClick={guardar} disabled={added||result.calorias===0}>{added?"✔️ Añadido":"➕ Añadir a mi día"}</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ================= MENÚ ================= */
+function Menu({active,log,consumed,target,onAdd,onRemove,settings,burned}){
+  const [text,setText]=useState(""),[loading,setLoading]=useState(false),[suggesting,setSuggesting]=useState(false),[menu,setMenu]=useState(null),[err,setErr]=useState(null);
+  if(!active) return <div className="wrap"><div className="card empty">Crea un perfil para registrar tu menú.</div></div>;
+  const anadir=async()=>{ if(!text.trim()) return; setLoading(true); setErr(null);
+    try{ const txt=await callAI({settings,system:"Eres un nutricionista. Estima calorías y macros.",userText:`El usuario comió: "${text}". Responde SOLO con JSON: {"nombre":"resumen corto","salud":"sano"|"moderado"|"poco_sano","calorias":entero,"proteinas":número,"carbos":número,"grasas":número}`});
+      const j=parseJSON(txt); if(j){ onAdd({nombre:j.nombre,calorias:j.calorias,proteinas:j.proteinas,carbos:j.carbos,grasas:j.grasas,salud:j.salud}); setText(""); } else setErr("No lo pillé bien, prueba otra vez.");
+    }catch(e){ setErr(e.message); } finally{ setLoading(false); } };
+  const aconsejar=async()=>{ setSuggesting(true); setMenu(null); setErr(null); const rest=Math.max(target-consumed+burned,300);
+    try{ const txt=await callAI({settings,system:"Eres un nutricionista. Propón menús equilibrados y sabrosos.",userText:`Propón un menú para el resto del día de ~${rest} kcal, para adelgazar en: ${active.zonas.join(", ")||"general"}. Responde SOLO con JSON: {"comidas":[{"momento":"Desayuno/Comida/Cena/Snack","plato":"descripción","calorias":entero}],"total":entero}`});
+      setMenu(parseJSON(txt));
+    }catch(e){ setErr(e.message); } finally{ setSuggesting(false); } };
+  return (
+    <div className="wrap fade">
+      <div className="eyebrow">Menú del día</div>
+      <h1 style={{fontSize:24,margin:"4px 0 16px",fontWeight:600}}>Tu diario de comidas</h1>
+      <VozComer active={active} target={target} consumed={consumed} burned={burned} settings={settings} onAdd={onAdd} />
+      <div className="card" style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+        <div><div className="note">Comidas − quemadas</div><div style={{fontFamily:"Fraunces",fontSize:28,fontWeight:600}}>{consumed-burned} <span style={{fontSize:14,color:"var(--muted)"}}>/ {target}</span></div></div>
+        <div style={{textAlign:"right"}}><div className="note">Restan</div><div style={{fontFamily:"Fraunces",fontSize:28,fontWeight:600,color:target-consumed+burned<0?"#E15A3C":"#2E7D4F"}}>{target-consumed+burned}</div></div>
+      </div>
+      <div className="field"><label>Escribe lo que has comido</label><textarea className="input" rows={2} placeholder="Ej. 2 huevos revueltos con pan integral y un café con leche" value={text} onChange={e=>setText(e.target.value)} style={{resize:"none"}} /></div>
+      <button className="btn btn-primary" onClick={anadir} disabled={loading||!text.trim()}>{loading?<><Spinner/> Calculando…</>:<>➕ Calcular y añadir</>}</button>
+      <button className="btn btn-ghost" style={{marginTop:12}} onClick={aconsejar} disabled={suggesting}>{suggesting?<><Spinner/> Pensando…</>:<>✨ Aconséjame un menú</>}</button>
+      <SnacksSaciantes active={active} settings={settings} onAdd={onAdd} />
+      {err && <div className="warn" style={{marginTop:14}}>⚠️ {err}</div>}
+      {menu && menu.comidas && (
+        <div className="card fade" style={{marginTop:16}}>
+          <div style={{fontFamily:"Fraunces",fontSize:18,fontWeight:600,marginBottom:6}}>Menú sugerido</div>
+          {menu.comidas.map((c,i)=>(
+            <div key={i} className="food-item"><div className="dot" style={{background:"var(--lime-soft)"}}>🍽️</div>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>{c.momento}</div><div className="note">{c.plato}</div></div>
+              <div style={{fontWeight:600,fontSize:13,whiteSpace:"nowrap"}}>{c.calorias} kcal</div></div>
+          ))}
+          <div className="note" style={{textAlign:"right",marginTop:8}}>Total aprox: {menu.total} kcal</div>
+        </div>
+      )}
+      <div style={{marginTop:24}}><div className="eyebrow" style={{marginBottom:12}}>Registrado hoy</div>
+        <div className="card">{log.length===0?<div className="empty">Sin comidas todavía.</div>:log.map(f=><FoodRow key={f.id} f={f} onRemove={onRemove} />)}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ================= EJERCICIO ================= */
+function Ejercicio({active,settings,exLog,addEx,removeEx,burned}){
+  const [zone,setZone]=useState(null),[loading,setLoading]=useState(false),[plan,setPlan]=useState(null);
+  const [exText,setExText]=useState(""),[exMin,setExMin]=useState(""),[exLoad,setExLoad]=useState(false);
+  if(!active) return <div className="wrap"><div className="card empty">Crea un perfil para ver ejercicios.</div></div>;
+  const zonas=active.zonas.length?active.zonas:ZONES;
+  const registrar=async()=>{ if(!exText.trim()||!exMin) return; setExLoad(true); const fb=Math.round(+exMin*7);
+    try{ const txt=await callAI({settings,system:"Eres un experto en fitness. Estima calorías quemadas de forma realista.",userText:`Estima las kcal quemadas por una persona de ${active.peso} kg haciendo "${exText}" durante ${exMin} minutos. Responde SOLO con JSON: {"nombre":"resumen corto del deporte","calorias":entero}`});
+      const j=parseJSON(txt); addEx({nombre:(j&&j.nombre)||exText,minutos:+exMin,calorias:(j&&j.calorias)||fb});
+    }catch{ addEx({nombre:exText,minutos:+exMin,calorias:fb}); } finally{ setExText(""); setExMin(""); setExLoad(false); } };
+  const cargar=async(z)=>{ setZone(z); setLoading(true); setPlan(null);
+    try{ const txt=await callAI({settings,system:"Eres un entrenador personal. Ejercicios seguros para principiantes.",userText:`Rutina para "${z}" para adelgazar/tonificar. Responde SOLO con JSON: {"intro":"1 frase motivadora","ejercicios":[{"nombre":"nombre","como":"cómo en 1 frase","series":"ej. 3x15","busqueda_youtube":"término"}],"consejo":"1 consejo"} Incluye 4-5 ejercicios.`});
+      setPlan(parseJSON(txt));
+    }catch{} finally{ setLoading(false); } };
+  return (
+    <div className="wrap fade">
+      <div className="eyebrow">Ejercicio</div>
+      <h1 style={{fontSize:24,margin:"4px 0 16px",fontWeight:600}}>Deporte y rutinas</h1>
+      <div className="card" style={{marginBottom:22}}>
+        <div className="eyebrow" style={{marginBottom:12}}>¿Qué deporte has hecho hoy?</div>
+        <input className="input" placeholder="Ej. correr, pádel, bici, nadar, pesas…" value={exText} onChange={e=>setExText(e.target.value)} style={{marginBottom:10}} />
+        <div style={{display:"flex",gap:10}}>
+          <input className="input" type="number" inputMode="numeric" placeholder="minutos" value={exMin} onChange={e=>setExMin(e.target.value)} style={{flex:1}} />
+          <button className="btn btn-primary" style={{width:"auto",padding:"12px 20px"}} onClick={registrar} disabled={exLoad||!exText.trim()||!exMin}>{exLoad?<Spinner/>:"➕ Añadir"}</button>
+        </div>
+        {exLog.length>0 && (
+          <div style={{marginTop:14}}>
+            {exLog.map(e=>(
+              <div key={e.id} className="burn-item"><div className="dot" style={{background:"var(--lime-soft)"}}>🏋️</div>
+                <div style={{flex:1}}><div style={{fontWeight:600,fontSize:15}}>{e.nombre}</div><div className="note">{e.minutos} min</div></div>
+                <div style={{fontWeight:600,color:"#2E7D4F",whiteSpace:"nowrap"}}>−{e.calorias} kcal</div>
+                <button onClick={()=>removeEx(e.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#B4AEA0",marginLeft:8,fontSize:15}}>🗑️</button></div>
+            ))}
+            <div style={{textAlign:"right",marginTop:10,fontWeight:700,color:"#2E7D4F"}}>🔥 Quemadas hoy: {burned} kcal</div>
+          </div>
+        )}
+      </div>
+      <div className="eyebrow" style={{marginBottom:12}}>Rutinas por zona</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:20}}>{zonas.map(z=><button key={z} className={"pill"+(zone===z?" on":"")} onClick={()=>cargar(z)}>🏋️ {z}</button>)}</div>
+      {loading && <div className="card empty"><Spinner big/><br/>Preparando tu rutina de {zone}…</div>}
+      {plan && !loading && (
+        <div className="fade">
+          <p style={{fontStyle:"italic",color:"var(--green-deep)",marginBottom:16}}>{plan.intro}</p>
+          {plan.ejercicios.map((e,i)=>(
+            <div key={i} className="ex-card"><div style={{display:"flex",gap:10,alignItems:"baseline"}}>
+              <span style={{fontFamily:"Fraunces",fontSize:20,color:"var(--lime)",fontWeight:700}}>{String(i+1).padStart(2,"0")}</span>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:16}}>{e.nombre}</div><div className="note" style={{marginTop:2}}>{e.como}</div>
+                <div style={{fontSize:13,fontWeight:600,color:"var(--green)",marginTop:6}}>{e.series}</div>
+                <a className="yt" href={"https://www.youtube.com/results?search_query="+encodeURIComponent(e.busqueda_youtube)} target="_blank" rel="noreferrer">▶️ Ver en YouTube</a></div>
+            </div></div>
+          ))}
+          <div className="card" style={{background:"var(--lime-soft)",border:"none"}}><div style={{fontWeight:700,fontSize:13,marginBottom:4}}>💡 Consejo</div><div style={{fontSize:14}}>{plan.consejo}</div></div>
+        </div>
+      )}
+      {!zone && !loading && <div className="card empty">🏋️<br/>Elige una zona para ver ejercicios y vídeos.</div>}
+    </div>
+  );
+}
+
+/* ================= PROGRESO ================= */
+function Logros({streak,cambio,weights,daily}){
+  const diasReg=daily.filter(d=>d.kcal>0).length;
+  const list=[
+    ["🏅","Primer registro","Registra tu primera comida",diasReg>=1],
+    ["🔥","Racha de 3 días","3 días seguidos registrando",streak>=3],
+    ["🏆","Racha de 7 días","Una semana completa",streak>=7],
+    ["⚖️","Primer peso","Registra tu peso",weights.length>=1],
+    ["📉","En marcha","Baja tu primer kilo",cambio<=-1],
+    ["🎯","Constancia","10 días con registro",diasReg>=10],
+  ];
+  return (<div>{list.map((l,i)=>(
+    <div key={i} className="card" style={{marginBottom:10,display:"flex",alignItems:"center",gap:14,opacity:l[3]?1:.55}}>
+      <div className="dot" style={{width:44,height:44,background:l[3]?"var(--lime-soft)":"var(--paper)",fontSize:20}}>{l[0]}</div>
+      <div style={{flex:1}}><div style={{fontWeight:600}}>{l[1]}</div><div className="note">{l[2]}</div></div>
+      {l[3]?<span style={{color:"#2E7D4F",fontSize:20}}>✔️</span>:<div className="note">Bloqueado</div>}
+    </div>
+  ))}</div>);
+}
+function Progreso({active,profiles,saveProfiles,settings,go}){
+  const [tab,setTab]=useState("medidas"); const [medidas,setMedidas]=useState([]); const [daily,setDaily]=useState([]); const [streak,setStreak]=useState(0);
+  const [metric,setMetric]=useState("peso"); const [form,setForm]=useState({peso:"",cintura:"",cadera:"",pierna:"",brazo:""});
+  const [analisis,setAnalisis]=useState(null); const [anLoad,setAnLoad]=useState(false); const [diario,setDiario]=useState([]);
+  const [planpro,setPlanpro]=useState(null); const [ayunoCfg,setAyunoCfg]=useState(null); const [entreno,setEntreno]=useState(null);
+  useEffect(()=>{ if(!active) return;
+    store.get("nf_planpro_"+active.id,null).then(setPlanpro);
+    store.get("nf_ayuno_"+active.id,null).then(setAyunoCfg);
+    store.get("nf_entreno_"+active.id,null).then(setEntreno);
+    (async()=>{ let m=await store.get("nf_medidas_"+active.id,[]);
+      if(!m.length){ const w=await store.get("nf_weight_"+active.id,[]); m=w.map(x=>({fecha:x.fecha,peso:x.peso})); if(m.length) store.set("nf_medidas_"+active.id,m); }
+      setMedidas(m); })();
+    (async()=>{ const arr=[]; for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i);
+      const l=await store.get("nf_log_"+active.id+"_"+dkey(d),[]); arr.push({fecha:dkey(d),etq:d.toLocaleDateString("es-ES",{day:"numeric",month:"numeric"}),kcal:l.reduce((s,f)=>s+(+f.calorias||0),0)}); }
+      setDaily(arr); let s=0; for(let i=arr.length-1;i>=0;i--){ if(arr[i].kcal>0) s++; else break; } setStreak(s); })();
+    (async()=>{ const ks=await store.keys("nf_resumen_"+active.id+"_"); const arr=[]; for(const k of ks){ const v=await store.get(k,null); if(v&&v.texto) arr.push(v); } arr.sort((a,b)=>b.fecha.localeCompare(a.fecha)); setDiario(arr); })();
+  },[active&&active.id]);
+  if(!active) return <div className="wrap"><div className="card empty">Crea un perfil para ver tu evolución.</div></div>;
+  const serie=(k)=>medidas.filter(m=>m[k]!=null).map(m=>({label:new Date(m.fecha+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"}),value:m[k]}));
+  const cambio=(k)=>{ const s=serie(k); if(s.length<2) return 0; return +(s[s.length-1].value-s[0].value).toFixed(1); };
+  const unidad=(k)=>{ const m=METRICAS.find(x=>x[0]===k); return m?m[2]:""; };
+  const addMedida=()=>{ const entry={fecha:dkey()}; let hay=false;
+    METRICAS.forEach(([k])=>{ const v=parseFloat(form[k]); if(v){ entry[k]=v; hay=true; } });
+    if(!hay) return; const prev=medidas.find(m=>m.fecha===dkey())||{}; const merged={...prev,...entry};
+    const arr=[...medidas.filter(m=>m.fecha!==dkey()),merged].sort((a,b)=>a.fecha.localeCompare(b.fecha)); setMedidas(arr); store.set("nf_medidas_"+active.id,arr);
+    if(entry.peso){ const nuevo={...active,peso:entry.peso}; nuevo.target=targetDe(nuevo); nuevo.macros=macrosObjetivo(nuevo.target); nuevo.aguaGoal=aguaObjetivo(entry.peso); saveProfiles(profiles.map(p=>p.id===active.id?nuevo:p)); }
+    setForm({peso:"",cintura:"",cadera:"",pierna:"",brazo:""}); };
+  const cambioPeso=cambio("peso"), cambioCint=cambio("cintura");
+  const iv=imc(active.peso,active.estatura),cat=iv?imcCat(iv):null;
+  const activos=daily.filter(d=>d.kcal>0); const media=activos.length?Math.round(activos.reduce((s,d)=>s+d.kcal,0)/activos.length):0;
+  const analizar=async()=>{ setAnLoad(true); setAnalisis(null);
+    try{ const sp=serie("peso"), sc=serie("cintura");
+      const resumen=`Peso: ${sp.length?sp[0].value+"kg → "+sp[sp.length-1].value+"kg (cambio "+cambioPeso+"kg)":active.peso+"kg"}. Cintura: ${sc.length?sc[0].value+"cm → "+sc[sc.length-1].value+"cm (cambio "+cambioCint+"cm)":"sin datos"}. Media calorías ${media}, objetivo ${active.target}. Racha ${streak} días. Zonas: ${active.zonas.join(", ")||"general"}.`;
+      const txt=await callAI({settings,system:"Eres un coach de nutrición y fitness. Analiza el progreso (peso y medidas) con empatía y da pasos concretos. Español.",userText:`Analiza este progreso en 3-4 frases y da 2 recomendaciones concretas, teniendo en cuenta el peso y la cintura. Datos: ${resumen}. Responde en texto plano.`});
+      setAnalisis(txt.trim());
+    }catch(e){ setAnalisis("No se pudo generar: "+e.message); } finally{ setAnLoad(false); } };
+  return (
+    <div className="wrap fade">
+      <div className="eyebrow">Progreso</div>
+      <h1 style={{fontSize:24,margin:"4px 0 16px",fontWeight:600}}>Tu evolución</h1>
+      <div style={{display:"flex",gap:10,marginBottom:16}}>
+        <div className="stat">🏆<b>{streak}</b><span>días de racha</span></div>
+        <div className="stat">⚖️<b style={{color:cambioPeso<0?"var(--green)":cambioPeso>0?"var(--coral)":undefined}}>{cambioPeso>0?"+":""}{cambioPeso} kg</b><span>de peso</span></div>
+        <div className="stat">📏<b style={{color:cambioCint<0?"var(--green)":cambioCint>0?"var(--coral)":undefined}}>{cambioCint>0?"+":""}{cambioCint} cm</b><span>de cintura</span></div>
+      </div>
+
+      {(planpro||ayunoCfg||entreno) && (
+        <div style={{marginBottom:16}}>
+          {entreno && (
+            <div className="card" style={{marginBottom:12}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                <div style={{fontWeight:700,fontSize:13}}>🏋️ Tu rutina de entreno</div>
+                <button className="link" onClick={()=>go&&go("entrenador")}>Ver</button>
+              </div>
+              <div className="note" style={{fontSize:13,lineHeight:1.5}}>{entreno.resumen||((entreno.dias?entreno.dias.length:0)+" días por semana. Toca “Ver”.")}</div>
+            </div>
+          )}
+          {planpro && (
+            <div className="card" style={{marginBottom:12}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                <div style={{fontWeight:700,fontSize:13}}>🧬 Tu plan personalizado</div>
+                <button className="link" onClick={()=>go&&go("habitos")}>Ver</button>
+              </div>
+              <div className="note" style={{fontSize:13,lineHeight:1.5}}>{planpro.resumen||"Plan guardado. Toca “Ver”."}</div>
+            </div>
+          )}
+          {ayunoCfg && ayunoCfg.inicio!=null && (()=>{ const horas=({"12:12":12,"14:10":10,"16:8":8,"18:6":6})[ayunoCfg.metodo]||8; const finH=(ayunoCfg.inicio+horas)%24; const now=new Date(); const hDec=now.getHours()+now.getMinutes()/60; const enV=ayunoCfg.inicio<finH?(hDec>=ayunoCfg.inicio&&hDec<finH):(hDec>=ayunoCfg.inicio||hDec<finH);
+            return (
+              <div className="card" style={{background:enV?"var(--lime-soft)":"var(--blue-soft)",border:"none",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <div><div style={{fontWeight:700,fontSize:13}}>⏱️ Ayuno {ayunoCfg.metodo}</div><div className="note">{enV?"🍽️ Ventana abierta":"🌙 En ayuno"} · {String(ayunoCfg.inicio).padStart(2,"0")}:00–{String(finH).padStart(2,"0")}:00</div></div>
+                <button className="link" onClick={()=>go&&go("ayuno")}>Ver</button>
+              </div>
+            ); })()}
+        </div>
+      )}
+      <div className="seg" style={{marginBottom:16}}>
+        <button className={tab==="medidas"?"on":""} onClick={()=>setTab("medidas")}>Medidas</button>
+        <button className={tab==="cal"?"on":""} onClick={()=>setTab("cal")}>Calorías</button>
+        <button className={tab==="logros"?"on":""} onClick={()=>setTab("logros")}>Logros</button>
+        <button className={tab==="diario"?"on":""} onClick={()=>setTab("diario")}>Diario</button>
+      </div>
+
+      {tab==="medidas" && (<>
+        <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:12}}>
+          {METRICAS.map(([k,l])=><button key={k} className={"metric-chip"+(metric===k?" on":"")} onClick={()=>setMetric(k)}>{l}</button>)}
+        </div>
+        <div className="card"><div className="eyebrow" style={{marginBottom:12}}>{METRICAS.find(m=>m[0]===metric)[1]} ({unidad(metric)})</div><LineChartSVG data={serie(metric)} /></div>
+        <div className="card" style={{marginTop:14}}>
+          <label style={{fontSize:13,fontWeight:600,display:"block",marginBottom:10}}>Registrar hoy (rellena lo que quieras)</label>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+            {METRICAS.map(([k,l,u])=>(
+              <div key={k}><div className="note" style={{marginBottom:4}}>{l} ({u})</div>
+                <input className="input" type="number" inputMode="decimal" placeholder={u} value={form[k]} onChange={e=>setForm({...form,[k]:e.target.value})} /></div>
+            ))}
+          </div>
+          <button className="btn btn-primary" style={{marginTop:12}} onClick={addMedida}>➕ Guardar medidas</button>
+        </div>
+        <div className="card" style={{marginTop:14,display:"flex",alignItems:"center",gap:12}}>❤️<div><div style={{fontFamily:"Fraunces",fontSize:22,fontWeight:600}}>IMC {iv||"—"}</div>{cat&&<div className="note" style={{color:cat[1],fontWeight:600}}>{cat[0]}</div>}</div></div>
+      </>)}
+
+      {tab==="cal" && (
+        <div className="card"><div className="eyebrow" style={{marginBottom:12}}>Calorías · últimos 14 días</div><BarChartSVG data={daily} goal={active.target} />
+          <div className="note" style={{textAlign:"center",marginTop:8}}>Objetivo: {active.target} kcal · Media: {media} kcal</div></div>
+      )}
+
+      {tab==="logros" && <Logros streak={streak} cambio={cambioPeso} weights={serie("peso")} daily={daily} />}
+
+      {tab==="diario" && (
+        diario.length===0 ? <div className="card empty">📔<br/>Aún no hay resúmenes guardados. Genera el “Resumen del día” en Inicio y se guardará aquí.</div>
+        : diario.map((d,i)=>(
+          <div key={i} className="diario-item"><div className="diario-fecha">{fmtCorta(d.fecha)}{d.neto!=null?` · ${d.neto} kcal netas`:""}</div><div style={{fontSize:14,lineHeight:1.5}}>{d.texto}</div></div>
+        ))
+      )}
+
+      <div className="card" style={{marginTop:16,background:"var(--blue-soft)",border:"none"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+          <div style={{display:"flex",alignItems:"center",gap:7,fontWeight:700,fontSize:13}}>✨ Análisis de tu progreso</div>
+          <button className="link" onClick={analizar} disabled={anLoad}>{anLoad?"…":"Analizar"}</button>
+        </div>
+        <p style={{fontSize:14,lineHeight:1.55}}>{anLoad?"Analizando tu evolución…":(analisis||"Toca “Analizar” para que la IA revise tu peso y medidas y te dé recomendaciones.")}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ================= PERFILES ================= */
+function Perfiles({profiles,activeId,save,setActive}){
+  const blank={nombre:"",sexo:"Mujer",edad:"",estatura:"",peso:"",actividad:"Ligero",zonas:[],fechaObjetivo:"",kgPerder:""};
+  const [form,setForm]=useState(null);
+  const toggleZona=(z)=>setForm(f=>({...f,zonas:f.zonas.includes(z)?f.zonas.filter(x=>x!==z):[...f.zonas,z]}));
+  const guardar=()=>{ if(!form.nombre.trim()||!form.edad||!form.estatura||!form.peso) return;
+    const target=targetDe(form); const rec={...form,target,macros:macrosObjetivo(target),aguaGoal:aguaObjetivo(form.peso),id:form.id||Date.now()};
+    const list=form.id?profiles.map(p=>p.id===form.id?rec:p):[...profiles,rec]; save(list); if(!form.id){ setActive(rec.id); store.set("nf_weight_"+rec.id,[{fecha:dkey(),peso:+form.peso}]); } setForm(null); };
+  const borrar=(id)=>{ save(profiles.filter(p=>p.id!==id)); setForm(null); };
+  if(form){
+    const preview=targetDe(form);
+    return (
+      <div className="wrap fade">
+        <button className="link" style={{display:"flex",alignItems:"center",gap:6,marginBottom:14}} onClick={()=>setForm(null)}>← Volver</button>
+        <h1 style={{fontSize:24,margin:"0 0 16px",fontWeight:600}}>{form.id?"Editar perfil":"Nuevo perfil"}</h1>
+        <div className="field"><label>Nombre</label><input className="input" value={form.nombre} onChange={e=>setForm({...form,nombre:e.target.value})} placeholder="Tu nombre" /></div>
+        <div className="field"><label>Sexo</label><select className="select" value={form.sexo} onChange={e=>setForm({...form,sexo:e.target.value})}><option>Mujer</option><option>Hombre</option></select></div>
+        <div className="row">
+          <div className="field"><label>Edad</label><input className="input" type="number" value={form.edad} onChange={e=>setForm({...form,edad:e.target.value})} placeholder="años" /></div>
+          <div className="field"><label>Estatura (cm)</label><input className="input" type="number" value={form.estatura} onChange={e=>setForm({...form,estatura:e.target.value})} placeholder="cm" /></div>
+        </div>
+        <div className="row">
+          <div className="field"><label>Peso (kg)</label><input className="input" type="number" value={form.peso} onChange={e=>setForm({...form,peso:e.target.value})} placeholder="kg" /></div>
+          <div className="field"><label>Actividad</label><select className="select" value={form.actividad} onChange={e=>setForm({...form,actividad:e.target.value})}>{Object.keys(ACTIVIDAD).map(a=><option key={a}>{a}</option>)}</select></div>
+        </div>
+        <div className="field"><label>Zonas que quieres trabajar</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>{ZONES.map(z=><button key={z} className={"pill"+(form.zonas.includes(z)?" on":"")} onClick={()=>toggleZona(z)}>{z}</button>)}</div></div>
+        <div className="eyebrow" style={{margin:"6px 0 10px"}}>Objetivo (opcional)</div>
+        <div className="row">
+          <div className="field"><label>Fecha objetivo</label><input className="input" type="date" value={form.fechaObjetivo} onChange={e=>setForm({...form,fechaObjetivo:e.target.value})} /></div>
+          <div className="field"><label>Kilos a perder</label><input className="input" type="number" value={form.kgPerder} onChange={e=>setForm({...form,kgPerder:e.target.value})} placeholder="kg" /></div>
+        </div>
+        {preview && <div className="card" style={{background:"var(--lime-soft)",border:"none",marginBottom:16,display:"flex",alignItems:"center",gap:12}}>🔥<div><div style={{fontFamily:"Fraunces",fontSize:22,fontWeight:600}}>{preview} kcal/día</div><div className="note">Objetivo diario calculado{form.fechaObjetivo&&form.kgPerder?" para tu meta":" para adelgazar de forma progresiva"}</div></div></div>}
+        <button className="btn btn-primary" onClick={guardar}>✔️ Guardar perfil</button>
+        {form.id && <button className="btn btn-ghost" style={{marginTop:10,color:"#a1381f"}} onClick={()=>borrar(form.id)}>🗑️ Eliminar perfil</button>}
+      </div>
+    );
+  }
+  return (
+    <div className="wrap fade">
+      <div className="eyebrow">Perfiles</div>
+      <h1 style={{fontSize:24,margin:"4px 0 18px",fontWeight:600}}>Quién usa la app</h1>
+      {profiles.length===0 && <div className="card empty" style={{marginBottom:14}}>Todavía no hay perfiles.</div>}
+      {profiles.map(p=>(
+        <div key={p.id} className="card" style={{marginBottom:12,display:"flex",alignItems:"center",gap:14}}>
+          <span className="avatar" style={{width:42,height:42,fontSize:17}}>{p.nombre.charAt(0).toUpperCase()}</span>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:16}}>{p.nombre} {p.id===activeId&&<span className="badge b-sano" style={{marginLeft:6,fontSize:10}}>Activo</span>}</div>
+            <div className="note" style={{display:"flex",gap:12,marginTop:3}}><span>⚖️ {p.peso}kg</span><span>📏 {p.estatura}cm</span><span>🔥 {p.target}kcal</span></div></div>
+          <div style={{display:"flex",gap:8}}>{p.id!==activeId&&<button className="btn btn-ghost btn-sm" onClick={()=>setActive(p.id)}>Usar</button>}<button className="btn btn-ghost btn-sm" onClick={()=>setForm({...p})}>Editar</button></div>
+        </div>
+      ))}
+      <button className="btn btn-primary" style={{marginTop:8}} onClick={()=>setForm({...blank,id:null})}>➕ Añadir perfil</button>
+    </div>
+  );
+}
+
+/* ================= APP ================= */
+function App(){
+  const [view,setView]=useState("inicio");
+  const [profiles,setProfiles]=useState([]); const [activeId,setActiveId]=useState(null);
+  const [log,setLog]=useState([]); const [exLog,setExLog]=useState([]); const [water,setWater]=useState(0);
+  const [settings,setSettings]=useState({provider:"gemini",geminiKey:"",region:"andalucia"});
+  const [ready,setReady]=useState(false); const [switcher,setSwitcher]=useState(false); const [showSettings,setShowSettings]=useState(false);
+  const [feedback,setFeedback]=useState(null); const [showResumen,setShowResumen]=useState(false);
+  const [cerdo,setCerdo]=useState(20);
+  const [reminders,setReminders]=useState({agua:false,aguaCada:2,picoteo:false,ayunoAviso:false,desde:9,hasta:22,telefono:""});
+  const [showReminders,setShowReminders]=useState(false);
+  const active=profiles.find(p=>p.id===activeId)||null;
+
+  useEffect(()=>{ (async()=>{
+    const pr=await store.get("nf_profiles",[]); const act=await store.get("nf_active",null); const st=await store.get("nf_settings",{provider:"gemini",geminiKey:"",region:"andalucia"});
+    const rem=await store.get("nf_reminders",{agua:false,aguaCada:2,picoteo:false,ayunoAviso:false,desde:9,hasta:22,telefono:""});
+    setProfiles(pr); setSettings(st); setReminders(rem); setActiveId(act||(pr[0]&&pr[0].id)||null); setReady(true);
+  })(); },[]);
+  useEffect(()=>{ if(!activeId){ setLog([]); setWater(0); setExLog([]); return; }
+    store.get("nf_log_"+activeId+"_"+dkey(),[]).then(setLog);
+    store.get("nf_water_"+activeId+"_"+dkey(),0).then(setWater);
+    store.get("nf_ex_"+activeId+"_"+dkey(),[]).then(setExLog);
+    store.get("nf_cerdo_"+activeId,null).then(obj=>{ let nivel=obj?obj.nivel:20; if(obj&&obj.fecha){ const dias=Math.round((new Date(dkey()+"T00:00:00")-new Date(obj.fecha+"T00:00:00"))/86400000); if(dias>0){ nivel=Math.min(100,nivel+Math.min(dias*5,30)); store.set("nf_cerdo_"+activeId,{nivel,fecha:dkey()}); } } setCerdo(nivel); });
+  },[activeId]);
+
+  const saveProfiles=(list)=>{ setProfiles(list); store.set("nf_profiles",list); };
+  const saveSettings=(s)=>{ setSettings(s); store.set("nf_settings",s); };
+  const saveReminders=(r)=>{ setReminders(r); store.set("nf_reminders",r); };
+
+  useEffect(()=>{
+    if(!("Notification" in window)) return;
+    const enHorario=()=>{ const h=new Date().getHours(); const d=reminders.desde==null?9:reminders.desde, ha=reminders.hasta==null?22:reminders.hasta; return h>=d && h<ha; };
+    const notif=(body)=>{ if(Notification.permission==="granted" && enHorario()){ try{ new Notification("Come sano, pisha 🥑",{body}); }catch{} } };
+    const timers=[];
+    if(reminders.agua) timers.push(setInterval(()=>notif(AGUA_MSG[Math.floor(Math.random()*AGUA_MSG.length)]), Math.max(1,reminders.aguaCada||2)*3600*1000));
+    if(reminders.picoteo) timers.push(setInterval(()=>notif(PICOTEO_MSG[Math.floor(Math.random()*PICOTEO_MSG.length)]), 3*3600*1000));
+    return ()=>timers.forEach(clearInterval);
+  },[reminders]);
+
+  useEffect(()=>{
+    if(!("Notification" in window) || !reminders.ayunoAviso || !activeId) return;
+    let last="";
+    const notif=(body)=>{ if(Notification.permission==="granted"){ try{ new Notification("Come sano, pisha ⏱️",{body}); }catch{} } };
+    const check=async()=>{
+      const cfg=await store.get("nf_ayuno_"+activeId,null); if(!cfg||cfg.inicio==null) return;
+      const now=new Date(); if(now.getMinutes()!==0) return;
+      const horas=({"12:12":12,"14:10":10,"16:8":8,"18:6":6})[cfg.metodo]||8;
+      const open=cfg.inicio, close=(cfg.inicio+horas)%24; const h=now.getHours(); const tag=h+":"+now.getDate();
+      if(h===open && last!=="o"+tag){ last="o"+tag; notif("🍽️ ¡Se abre tu ventana de comida, pisha! A comer con cabeza."); }
+      else if(h===close && last!=="c"+tag){ last="c"+tag; notif("🌙 Se cierra la ventana, quillo. A descansar el estómago hasta mañana."); }
+    };
+    const t=setInterval(check,60000); check();
+    return ()=>clearInterval(t);
+  },[reminders.ayunoAviso, activeId]);
+  const setActive=(id)=>{ setActiveId(id); store.set("nf_active",id); setSwitcher(false); };
+  const saveLog=(e)=>{ setLog(e); store.set("nf_log_"+activeId+"_"+dkey(),e); };
+  const removeFood=(id)=>saveLog(log.filter(f=>f.id!==id));
+  const setAgua=(n)=>{ const v=Math.max(0,n); setWater(v); store.set("nf_water_"+activeId+"_"+dkey(),v); };
+  const saveEx=(e)=>{ setExLog(e); store.set("nf_ex_"+activeId+"_"+dkey(),e); };
+  const addEx=(x)=>{ saveEx([...exLog,{...x,id:Date.now()+Math.random()}]); bumpCerdo(-6); };
+  const removeEx=(id)=>saveEx(exLog.filter(e=>e.id!==id));
+  const burned=exLog.reduce((s,e)=>s+(+e.calorias||0),0);
+  const bumpCerdo=(delta)=>{ if(!activeId) return; setCerdo(prev=>{ const n=Math.max(0,Math.min(100,Math.round(prev+delta))); store.set("nf_cerdo_"+activeId,{nivel:n,fecha:dkey()}); return n; }); };
+  const addFood=(f)=>{ const nuevos=[...log,{...f,id:Date.now()+Math.random()}]; saveLog(nuevos); if(!active) return;
+    const total=nuevos.reduce((s,x)=>s+(+x.calorias||0),0); const net=total-burned; const malo=f.salud==="poco_sano"; const pasado=net>active.target;
+    bumpCerdo(malo?9:(pasado?6:-5));
+    if(malo||pasado) setFeedback({type:"regano",food:f,consumed:net,target:active.target,malo,pasado});
+    else setFeedback({type:"ole",text:OLES[Math.floor(Math.random()*OLES.length)]});
+  };
+  const saveGoal=(fechaObjetivo,kgPerder)=>{ const nuevo={...active,fechaObjetivo,kgPerder}; nuevo.target=targetDe(nuevo); nuevo.macros=macrosObjetivo(nuevo.target); saveProfiles(profiles.map(p=>p.id===active.id?nuevo:p)); };
+
+  const consumed=log.reduce((s,f)=>s+(+f.calorias||0),0);
+  const macrosHoy=log.reduce((a,f)=>({p:a.p+(+f.proteinas||0),c:a.c+(+f.carbos||0),g:a.g+(+f.grasas||0)}),{p:0,c:0,g:0});
+  const target=active?active.target:null;
+
+  if(!ready) return <div className="nf"><div style={{display:"flex",height:"100vh",alignItems:"center",justifyContent:"center"}}><Spinner big/></div></div>;
+
+  return (
+    <div className="nf">
+      <header className="hdr"><div className="hdr-top">
+        <div onClick={()=>setView("inicio")} style={{cursor:"pointer"}}>
+          <div className="brand">Come sano <span>pisha</span></div>
+          <div className="tagline">🥑 Comer bien y moverse, con salero 🏃</div>
+        </div>
+        <div className="hdr-actions">
+          <button className="icon-btn" onClick={()=>setShowReminders(true)}>🔔</button>
+          <button className="icon-btn" onClick={()=>setShowSettings(true)}>⚙️</button>
+          {active? <button className="chip-btn" onClick={()=>setSwitcher(true)}><span className="avatar">{active.nombre.charAt(0).toUpperCase()}</span>{active.nombre}</button>
+                 : <button className="chip-btn" onClick={()=>setView("perfiles")}>➕ Perfil</button>}
+        </div>
+      </div></header>
+
+      {view==="inicio" && <Inicio active={active} consumed={consumed} target={target} macrosHoy={macrosHoy} log={log} water={water} setAgua={setAgua} onRemove={removeFood} go={setView} settings={settings} burned={burned} openResumen={()=>setShowResumen(true)} openPlan={()=>setView("plan")} cerdo={cerdo} />}
+      {view==="plan" && (active? <PlanView active={active} saveGoal={saveGoal} settings={settings} back={()=>setView("inicio")} /> : <NoProfile go={setView} />)}
+      {view==="habitos" && (active? <HabitosView active={active} settings={settings} back={()=>setView("inicio")} /> : <NoProfile go={setView} />)}
+      {view==="entrenador" && (active? <EntrenadorView active={active} settings={settings} back={()=>setView("inicio")} onWorkoutDone={()=>bumpCerdo(-6)} /> : <NoProfile go={setView} />)}
+      {view==="ayuno" && (active? <AyunoView active={active} settings={settings} back={()=>setView("inicio")} /> : <NoProfile go={setView} />)}
+      {view==="camara" && <Camara active={active} onAdd={addFood} settings={settings} />}
+      {view==="menu" && <Menu active={active} log={log} consumed={consumed} target={target} onAdd={addFood} onRemove={removeFood} settings={settings} burned={burned} />}
+      {view==="ejercicio" && <Ejercicio active={active} settings={settings} exLog={exLog} addEx={addEx} removeEx={removeEx} burned={burned} />}
+      {view==="progreso" && <Progreso active={active} profiles={profiles} saveProfiles={saveProfiles} settings={settings} go={setView} />}
+      {view==="perfiles" && <Perfiles profiles={profiles} activeId={activeId} save={saveProfiles} setActive={setActive} />}
+
+      {switcher && (
+        <div className="overlay" onClick={()=>setSwitcher(false)}><div className="sheet" onClick={e=>e.stopPropagation()}>
+          <SheetTitle title="Cambiar de perfil" onClose={()=>setSwitcher(false)} />
+          {profiles.map(p=>(
+            <div key={p.id} className="food-item" style={{cursor:"pointer"}} onClick={()=>setActive(p.id)}>
+              <span className="avatar" style={{width:34,height:34,fontSize:14}}>{p.nombre.charAt(0).toUpperCase()}</span>
+              <div style={{flex:1}}><div style={{fontWeight:600}}>{p.nombre}</div><div className="note">{p.target} kcal/día</div></div>
+              {p.id===activeId&&<span style={{color:"#2E7D4F"}}>✔️</span>}
+            </div>
+          ))}
+          <button className="btn btn-ghost" style={{marginTop:14}} onClick={()=>{setSwitcher(false); setView("perfiles");}}>👤 Gestionar perfiles</button>
+        </div></div>
+      )}
+      {showSettings && <SettingsSheet settings={settings} save={saveSettings} onClose={()=>setShowSettings(false)} />}
+      {showReminders && <RemindersSheet reminders={reminders} save={saveReminders} onClose={()=>setShowReminders(false)} />}
+      {feedback&&feedback.type==="ole" && <ToastOle text={feedback.text} onDone={()=>setFeedback(null)} />}
+      {feedback&&feedback.type==="regano" && <ReganoSheet data={feedback} settings={settings} onClose={()=>setFeedback(null)} />}
+      {showResumen && active && <ResumenSheet active={active} log={log} exLog={exLog} consumed={consumed} burned={burned} target={target} water={water} settings={settings} onClose={()=>setShowResumen(false)} />}
+
+      <nav className="nav">
+        {[["inicio","🏠","Inicio"],["camara","📷","Cámara"],["menu","🍽️","Menú"],["ejercicio","💪","Ejercicio"],["progreso","📈","Progreso"]].map(a=>(
+          <button key={a[0]} className={view===a[0]||(a[0]==="inicio"&&(view==="plan"||view==="habitos"||view==="ayuno"||view==="entrenador"))||(a[0]==="progreso"&&view==="perfiles")?"on":""} onClick={()=>setView(a[0])}>
+            <span className="ni">{a[1]}</span>{a[2]}
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+<script>
+(function () {
+  try {
+    var src = document.getElementById("app-src").textContent;
+    var out = Babel.transform(src, { presets: [["react", { runtime: "classic" }]] }).code;
+    var s = document.createElement("script");
+    s.textContent = out;
+    document.body.appendChild(s);
+  } catch (err) {
+    var r = document.getElementById("root");
+    if (r) r.innerHTML = '<div style="font-family:system-ui,sans-serif;padding:34px 24px;color:#a1381f;line-height:1.55"><div style="font-size:34px">😵‍💫</div><b>Uy, no cargó bien.</b><br>' + ((err && err.message) || err) + '</div>';
+    console.error(err);
+  }
+})();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
